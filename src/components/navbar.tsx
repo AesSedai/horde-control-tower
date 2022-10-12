@@ -1,0 +1,66 @@
+import { alpha, AppBar, Box, InputBase, styled, Toolbar, Typography } from "@mui/material"
+import { setKey } from "../slices/apikey"
+import { useAppDispatch, useAppSelector } from "../store/hooks"
+import { HordeStatus } from "./hordeStatus"
+
+const Wrapper = styled("div")(({ theme }) => ({
+    position: "relative",
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: alpha(theme.palette.common.white, 0.15),
+    "&:hover": {
+        backgroundColor: alpha(theme.palette.common.white, 0.25)
+    },
+    marginLeft: 0,
+    width: "100%",
+    [theme.breakpoints.up("sm")]: {
+        width: "auto"
+    }
+}))
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+    color: "inherit",
+    "& .MuiInputBase-input": {
+        padding: theme.spacing(1, 1, 1, 1),
+        transition: theme.transitions.create("width"),
+        width: "100%",
+        filter: "blur(2px)",
+        [theme.breakpoints.up("sm")]: {
+            width: "12ch",
+            "&:focus": {
+                width: "20ch"
+            }
+        },
+        "&:focus": {
+            filter: "none"
+        }
+    }
+}))
+
+export const Navbar = (): JSX.Element => {
+    const apiKey = useAppSelector((state) => state.apikey.apikey)
+    const dispatch = useAppDispatch()
+
+    const onBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+        dispatch(setKey(event.target.value))
+    }
+
+    return (
+        <AppBar position="static">
+            <Toolbar>
+                <Typography
+                    variant="h6"
+                    noWrap
+                    component="div"
+                    sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}>
+                    Horde Control Tower
+                </Typography>
+                <Box pr={2}>
+                    <HordeStatus />
+                </Box>
+                <Wrapper>
+                    <StyledInputBase defaultValue={apiKey} placeholder="API Key" onBlur={onBlur} />
+                </Wrapper>
+            </Toolbar>
+        </AppBar>
+    )
+}
