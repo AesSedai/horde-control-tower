@@ -17,13 +17,18 @@ const Wrapper = styled("div")(({ theme }) => ({
     }
 }))
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
+type DivProps = {
+    apikey: string | undefined
+}
+
+// only blur the input when an API key is provided
+const StyledInputBase = styled(InputBase)<DivProps>(({ theme, apikey }) => ({
     color: "inherit",
     "& .MuiInputBase-input": {
         padding: theme.spacing(1, 1, 1, 1),
         transition: theme.transitions.create("width"),
         width: "100%",
-        filter: "blur(2px)",
+        filter: (apikey ?? "").length > 0 ? "blur(2px)" : "none",
         [theme.breakpoints.up("sm")]: {
             width: "12ch",
             "&:focus": {
@@ -58,7 +63,7 @@ export const Navbar = (): JSX.Element => {
                     <HordeStatus />
                 </Box>
                 <Wrapper>
-                    <StyledInputBase defaultValue={apiKey} placeholder="API Key" onBlur={onBlur} />
+                    <StyledInputBase defaultValue={apiKey} placeholder="API Key" onBlur={onBlur} apikey={apiKey} />
                 </Wrapper>
             </Toolbar>
         </AppBar>

@@ -1,9 +1,9 @@
 import CircleIcon from "@mui/icons-material/Circle"
 import { Box, Typography } from "@mui/material"
-import { useGetStatusModeQuery } from "../services/stableHorde"
+import { stableHorde } from "../services/stableHorde"
 
 export const HordeStatus = (): JSX.Element => {
-    const { data, error, isLoading } = useGetStatusModeQuery(null as unknown as void, { pollingInterval: 30000 })
+    const { data, error, isLoading } = stableHorde.useGetStatusModeQuery(undefined, { pollingInterval: 30000 })
 
     if (isLoading) {
         return <Typography variant="h6">Loading Horde status ...</Typography>

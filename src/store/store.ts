@@ -4,15 +4,19 @@ import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, R
 import storage from "redux-persist/lib/storage"
 import { stableHorde } from "../services/stableHorde"
 import { apiKeySlice } from "../slices/apikey"
+import { localStateSlice } from "../slices/localState"
 
 const reducers = combineReducers({
     [stableHorde.reducerPath]: stableHorde.reducer,
-    [apiKeySlice.name]: apiKeySlice.reducer
+    [apiKeySlice.name]: apiKeySlice.reducer,
+    [localStateSlice.name]: localStateSlice.reducer
 })
 
+// only persist the API key
 const persistConfig = {
     key: "root",
-    storage
+    storage,
+    whitelist: [apiKeySlice.name]
 }
 
 const persistedReducer = persistReducer(persistConfig, reducers)

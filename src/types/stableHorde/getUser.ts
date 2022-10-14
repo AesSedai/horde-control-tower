@@ -1,4 +1,4 @@
-export interface GetUsers {
+export interface GetUser {
     username: string
     id: number
     kudos: number

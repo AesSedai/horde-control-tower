@@ -1,5 +1,6 @@
 import { GetStatusMode } from "./getStatusMode"
 import { GetStatusPerformance } from "./getStatusPerformance"
-import { GetUsers } from "./getUsers"
+import { GetUser } from "./getUser"
+import { GetWorker } from "./getWorker"
 
-export type { GetStatusMode, GetUsers, GetStatusPerformance }
+export type { GetStatusMode, GetStatusPerformance, GetUser, GetWorker }
