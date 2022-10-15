@@ -1,17 +1,13 @@
 import { useForm } from "@mantine/form"
 import { Box, Switch, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material"
-import { useEffect } from "react"
-import { stableHorde } from "../../services/stableHorde"
+import { useQueryClient } from "@tanstack/react-query"
+import { userKeys } from "../../services/stableHorde"
 import { useAppSelector } from "../../store/hooks"
+import { GetUser } from "../../types/stableHorde/getUser"
 
 export const UserTable = (): JSX.Element => {
     const userId = useAppSelector((state) => state.localState.selectedUser)
-    const { data } = stableHorde.useGetUsersQuery(undefined, {
-        selectFromResult: ({ data }) => ({
-            // you somehow get a pass because your username is in the dataset twice.
-            data: data?.find((user) => user.id === userId)
-        })
-    })
+    const queryClient = useQueryClient()
 
     const form = useForm({
         initialValues: {
@@ -19,6 +15,12 @@ export const UserTable = (): JSX.Element => {
             worker_invited: 0
         }
     })
+
+    if (userId == null) {
+        return <></>
+    }
+
+    const data = queryClient.getQueryData<GetUser>(userKeys.detail(userId))
 
     if (data == null) {
         return <></>

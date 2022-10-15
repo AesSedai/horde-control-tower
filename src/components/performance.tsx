@@ -1,8 +1,9 @@
 import { Paper, Typography } from "@mui/material"
-import { stableHorde } from "../services/stableHorde"
+import { useQuery } from "@tanstack/react-query"
+import { getStatusPerformance } from "../services/stableHorde"
 
 export const Performance = (): JSX.Element => {
-    const { data, isLoading, error } = stableHorde.useGetStatusPerformanceQuery(undefined, { pollingInterval: 30000 })
+    const { data, isLoading, error } = useQuery(["performance"], getStatusPerformance, { staleTime: 1000 * 61 })
 
     if (isLoading) {
         return <Typography variant="h6">Loading Horde status ...</Typography>

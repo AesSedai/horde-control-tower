@@ -40,6 +40,8 @@
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.8",
     "@reduxjs/toolkit": "^1.8.5",
+    "@tanstack/react-query": "^4.12.0",
+    "axios": "^1.1.2",
     "luxon": "^3.0.4",
     "radash": "^7.1.0",
     "react": "^18.2.0",
@@ -51,6 +53,7 @@
     "use-async-effect": "^2.2.7"
   },
   "devDependencies": {
+    "@tanstack/react-query-devtools": "^4.12.0",
     "@types/luxon": "^3.0.1",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",

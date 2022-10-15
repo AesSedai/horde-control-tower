@@ -2,12 +2,10 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit"
 import { setupListeners } from "@reduxjs/toolkit/query"
 import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from "redux-persist"
 import storage from "redux-persist/lib/storage"
-import { stableHorde } from "../services/stableHorde"
 import { apiKeySlice } from "../slices/apikey"
 import { localStateSlice } from "../slices/localState"
 
 const reducers = combineReducers({
-    [stableHorde.reducerPath]: stableHorde.reducer,
     [apiKeySlice.name]: apiKeySlice.reducer,
     [localStateSlice.name]: localStateSlice.reducer
 })
@@ -28,7 +26,7 @@ export const store = configureStore({
             serializableCheck: {
                 ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
             }
-        }).concat(stableHorde.middleware),
+        }),
     devTools: true
 })
 

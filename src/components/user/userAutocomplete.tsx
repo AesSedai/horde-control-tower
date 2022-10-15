@@ -1,17 +1,20 @@
 import { Autocomplete, TextField } from "@mui/material"
-import { stableHorde } from "../../services/stableHorde"
+import { useQuery } from "@tanstack/react-query"
+import { getUsers, userKeys } from "../../services/stableHorde"
 import { setUser } from "../../slices/localState"
 import { useAppDispatch } from "../../store/hooks"
 import { GetUser } from "../../types/stableHorde/api"
 
 export const UserAutocomplete = (): JSX.Element => {
     const dispatch = useAppDispatch()
-    const { data } = stableHorde.useGetUsersQuery(undefined, {
-        selectFromResult: ({ data }) => ({
-            // you somehow get a pass because your username is in the dataset twice.
-            data: data?.filter((user) => user.username !== "gyrados#87")
-        })
-    })
+
+    const { data } = useQuery(userKeys.all, getUsers, { staleTime: 1000 * 61 })
+
+    if (data == null) {
+        return <></>
+    }
+
+    const filteredData = data.filter((user) => user.username !== "gyrados#87")
 
     const onChange = (event: React.SyntheticEvent<Element, Event>, value: GetUser | null): void => {
         if (value != null) {
@@ -22,11 +25,11 @@ export const UserAutocomplete = (): JSX.Element => {
     return (
         <Autocomplete
             disablePortal
-            options={data ?? []}
+            options={filteredData ?? []}
             sx={{ width: 300 }}
             blurOnSelect
             autoHighlight
-            loading={data == null}
+            loading={filteredData == null}
             loadingText={"Loading users..."}
             getOptionLabel={(option) => option.username}
             isOptionEqualToValue={(option, value) => option.id === value.id}

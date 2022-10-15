@@ -1,29 +1,21 @@
-import { createApi } from "@reduxjs/toolkit/query/react"
-import { baseQuery } from "../store/baseQuery"
 import { GetStatusMode, GetStatusPerformance, GetUser, GetWorker } from "../types/stableHorde/api"
+import { axiosBase } from "../utils/axios"
 
 // Define a service using a base URL and expected endpoints
-export const stableHorde = createApi({
-    reducerPath: "stableHorde",
-    baseQuery: baseQuery,
-    endpoints: (builder) => ({
-        getStatusMode: builder.query<GetStatusMode, void>({
-            query: () => "status/modes"
-        }),
-        getStatusPerformance: builder.query<GetStatusPerformance, void>({
-            query: () => "status/performance"
-        }),
-        getUsers: builder.query<GetUser[], void>({
-            query: () => "users"
-        }),
-        getUser: builder.query<GetUser, string>({
-            query: (id) => `users/${id}`
-        }),
-        getWorkers: builder.query<GetWorker[], void>({
-            query: () => "workers"
-        }),
-        getWorker: builder.query<GetWorker, string>({
-            query: (id) => `workers/${id}`
-        })
-    })
-})
+export const getStatusMode = (): Promise<GetStatusMode> =>
+    axiosBase.get("status/modes").then((response) => response.data)
+export const getStatusPerformance = (): Promise<GetStatusPerformance> =>
+    axiosBase.get("status/performance").then((response) => response.data)
+export const getUsers = (): Promise<GetUser[]> => axiosBase.get("users").then((response) => response.data)
+export const getUser = (id: string): Promise<GetUser> => axiosBase.get(`users/${id}`).then((response) => response.data)
+export const getWorkers = (): Promise<GetWorker[]> => axiosBase.get("workers").then((response) => response.data)
+export const getWorker = (id: string): Promise<GetWorker> =>
+    axiosBase.get(`workers/${id}`).then((response) => response.data)
+
+export const userKeys = {
+    all: ["users"] as const,
+    lists: () => [...userKeys.all, "list"] as const,
+    list: (filters: string) => [...userKeys.lists(), { filters }] as const,
+    details: () => [...userKeys.all, "detail"] as const,
+    detail: (id: number) => [...userKeys.details(), id] as const
+}

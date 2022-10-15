@@ -6,6 +6,8 @@ import {
     createTheme,
     ThemeProvider
 } from "@mui/material/styles"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { createRoot } from "react-dom/client"
 import { Provider } from "react-redux"
 import { PersistGate } from "redux-persist/integration/react"
@@ -23,15 +25,26 @@ const darkTheme = createTheme({
     }
 })
 
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false
+        }
+    }
+})
+
 createRoot(document.getElementById("root") as HTMLElement).render(
     <CacheProvider value={muiCache}>
         <ThemeProvider theme={darkTheme}>
             <CssBaseline />
-            <Provider store={store}>
-                <PersistGate loading={null} persistor={persistor}>
-                    <App />
-                </PersistGate>
-            </Provider>
+            <QueryClientProvider client={queryClient}>
+                <Provider store={store}>
+                    <PersistGate loading={null} persistor={persistor}>
+                        <App />
+                    </PersistGate>
+                </Provider>
+                <ReactQueryDevtools />
+            </QueryClientProvider>
         </ThemeProvider>
     </CacheProvider>
 )
