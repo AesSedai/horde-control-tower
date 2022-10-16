@@ -1,36 +1,34 @@
 import { useForm } from "@mantine/form"
-import { Box, Switch, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material"
-import { useQueryClient } from "@tanstack/react-query"
-import { userKeys } from "../../services/stableHorde"
-import { useAppSelector } from "../../store/hooks"
+import {
+    Box,
+    Switch,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableRow,
+    TextField,
+    Typography
+} from "@mui/material"
 import { GetUser } from "../../types/stableHorde/getUser"
 
-export const UserTable = (): JSX.Element => {
-    const userId = useAppSelector((state) => state.localState.selectedUser)
-    const queryClient = useQueryClient()
+interface Props {
+    user: GetUser
+}
+
+export const UserTable = (props: Props): JSX.Element => {
+    const { user } = props
 
     const form = useForm({
         initialValues: {
-            trusted: false,
-            worker_invited: 0
+            trusted: user.trusted,
+            worker_invited: user.worker_invited
         }
     })
 
-    if (userId == null) {
-        return <></>
-    }
-
-    const data = queryClient.getQueryData<GetUser>(userKeys.detail(userId))
-
-    if (data == null) {
-        return <></>
-    }
-
-    console.log("data", data)
-
     return (
         <TableContainer component={Box}>
-            <Table>
+            <Table size="small">
                 <TableBody>
                     <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                         <TableCell component="th" scope="row">
@@ -38,7 +36,7 @@ export const UserTable = (): JSX.Element => {
                         </TableCell>
                         <TableCell align="right">
                             <Typography variant="body1">
-                                {data.username} {data.moderator ? "(moderator)" : ""}
+                                {user.username} {user.moderator ? "(moderator)" : ""}
                             </Typography>
                         </TableCell>
                     </TableRow>
@@ -47,7 +45,7 @@ export const UserTable = (): JSX.Element => {
                             <Typography variant="body1">Trusted</Typography>
                         </TableCell>
                         <TableCell align="right">
-                            <Switch {...form.getInputProps("trusted")} />
+                            <Switch {...form.getInputProps("trusted", { type: "checkbox" })} size="small" />
                         </TableCell>
                     </TableRow>
                     <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
@@ -55,7 +53,26 @@ export const UserTable = (): JSX.Element => {
                             <Typography variant="body1">Worker Invites</Typography>
                         </TableCell>
                         <TableCell align="right">
-                            <Typography variant="body1">{data.worker_invited}</Typography>
+                            <TextField
+                                variant="standard"
+                                {...form.getInputProps("worker_invited")}
+                                sx={{ maxWidth: "100px" }}
+                                InputProps={{
+                                    sx: {
+                                        "& input": {
+                                            textAlign: "right"
+                                        }
+                                    }
+                                }}
+                            />
+                        </TableCell>
+                    </TableRow>
+                    <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                        <TableCell component="th" scope="row">
+                            <Typography variant="body1">Worker Count</Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                            <Typography variant="body1">{user.worker_count}</Typography>
                         </TableCell>
                     </TableRow>
                 </TableBody>

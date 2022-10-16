@@ -7,7 +7,7 @@ export const getStatusMode = (): Promise<GetStatusMode> =>
 export const getStatusPerformance = (): Promise<GetStatusPerformance> =>
     axiosBase.get("status/performance").then((response) => response.data)
 export const getUsers = (): Promise<GetUser[]> => axiosBase.get("users").then((response) => response.data)
-export const getUser = (id: string): Promise<GetUser> => axiosBase.get(`users/${id}`).then((response) => response.data)
+export const getUser = (id: number): Promise<GetUser> => axiosBase.get(`users/${id}`).then((response) => response.data)
 export const getWorkers = (): Promise<GetWorker[]> => axiosBase.get("workers").then((response) => response.data)
 export const getWorker = (id: string): Promise<GetWorker> =>
     axiosBase.get(`workers/${id}`).then((response) => response.data)
@@ -18,4 +18,12 @@ export const userKeys = {
     list: (filters: string) => [...userKeys.lists(), { filters }] as const,
     details: () => [...userKeys.all, "detail"] as const,
     detail: (id: number) => [...userKeys.details(), id] as const
+}
+
+export const workerKeys = {
+    all: ["workers"] as const,
+    lists: () => [...workerKeys.all, "list"] as const,
+    list: (filters: string) => [...workerKeys.lists(), { filters }] as const,
+    details: () => [...workerKeys.all, "detail"] as const,
+    detail: (id: string) => [...workerKeys.details(), id] as const
 }
