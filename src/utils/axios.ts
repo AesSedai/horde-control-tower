@@ -7,7 +7,7 @@ export const axiosBase = axios.create({
 
 axiosBase.interceptors.request.use(
     function (config) {
-        const apiKey = store.getState().apikey.apikey
+        const apiKey = store.getState().persist.apikey
         if (config.headers != null && apiKey != null) {
             config.headers["apikey"] = apiKey
         }
@@ -18,3 +18,7 @@ axiosBase.interceptors.request.use(
         return Promise.reject(error)
     }
 )
+
+export const axiosLocal = axios.create({
+    baseURL: "http://localhost:3000"
+})

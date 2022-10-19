@@ -1,5 +1,5 @@
 import { alpha, AppBar, Box, InputBase, styled, Toolbar, Typography } from "@mui/material"
-import { setKey } from "../slices/apikey"
+import { setKey } from "../slices/persist"
 import { useAppDispatch, useAppSelector } from "../store/hooks"
 import { HordeStatus } from "./hordeStatus"
 
@@ -42,7 +42,7 @@ const StyledInputBase = styled(InputBase)<DivProps>(({ theme, apikey }) => ({
 }))
 
 export const Navbar = (): JSX.Element => {
-    const apiKey = useAppSelector((state) => state.apikey.apikey)
+    const apiKey = useAppSelector((state) => state.persist.apikey)
     const dispatch = useAppDispatch()
 
     const onBlur = (event: React.FocusEvent<HTMLInputElement>) => {

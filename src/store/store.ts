@@ -2,11 +2,11 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit"
 import { setupListeners } from "@reduxjs/toolkit/query"
 import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from "redux-persist"
 import storage from "redux-persist/lib/storage"
-import { apiKeySlice } from "../slices/apikey"
 import { localStateSlice } from "../slices/localState"
+import { persistSlice } from "../slices/persist"
 
 const reducers = combineReducers({
-    [apiKeySlice.name]: apiKeySlice.reducer,
+    [persistSlice.name]: persistSlice.reducer,
     [localStateSlice.name]: localStateSlice.reducer
 })
 
@@ -14,7 +14,7 @@ const reducers = combineReducers({
 const persistConfig = {
     key: "root",
     storage,
-    whitelist: [apiKeySlice.name]
+    whitelist: [persistSlice.name]
 }
 
 const persistedReducer = persistReducer(persistConfig, reducers)

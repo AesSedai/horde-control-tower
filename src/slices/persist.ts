@@ -1,13 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
-interface ApiKeySliceType {
-    apikey?: string
+interface PersistSliceType {
+    apikey: string,
+    favorites: number[]
 }
 
-const initialState: ApiKeySliceType = {}
+const initialState: PersistSliceType = {
+    apikey: "",
+    favorites: []
+}
 
-export const apiKeySlice = createSlice({
-    name: "apikey",
+export const persistSlice = createSlice({
+    name: "persist",
     initialState,
     reducers: {
         setKey: (state, action: PayloadAction<string>) => {
@@ -17,4 +21,4 @@ export const apiKeySlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setKey } = apiKeySlice.actions
+export const { setKey } = persistSlice.actions

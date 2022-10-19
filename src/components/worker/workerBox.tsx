@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material"
+import { Box, Divider, Typography } from "@mui/material"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getUser, userKeys } from "../../services/stableHorde"
 import { WorkerWrapper } from "./workerWrapper"
@@ -26,7 +26,10 @@ export const WorkerBox = (props: Props): JSX.Element => {
     return (
         <>
             {data.worker_ids.map((workerId) => (
-                <WorkerWrapper key={workerId} workerId={workerId} />
+                <Box key={workerId}>
+                    <WorkerWrapper key={workerId} workerId={workerId} />
+                    <Divider />
+                </Box>
             ))}
         </>
     )

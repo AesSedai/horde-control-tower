@@ -10,10 +10,10 @@ export const App = (): JSX.Element => {
             <BackgroundQueries />
             <Navbar />
             <Grid container spacing={2} p={2}>
-                <Grid item xs={2}>
+                <Grid item xs={3}>
                     <Performance />
                 </Grid>
-                <Grid item xs={5}>
+                <Grid item xs={3}>
                     <UserLookup />
                 </Grid>
             </Grid>

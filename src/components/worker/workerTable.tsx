@@ -12,7 +12,8 @@ export const WorkerTable = (props: Props): JSX.Element => {
     const form = useForm({
         initialValues: {
             paused: worker.paused,
-            trusted: worker.trusted
+            trusted: worker.trusted,
+            maintenance: worker.maintenance_mode
         }
     })
 
@@ -30,10 +31,26 @@ export const WorkerTable = (props: Props): JSX.Element => {
                     </TableRow>
                     <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                         <TableCell component="th" scope="row">
+                            <Typography variant="body1">Worker ID</Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                            <Typography variant="body1">{worker.id}</Typography>
+                        </TableCell>
+                    </TableRow>                    
+                    <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                        <TableCell component="th" scope="row">
                             <Typography variant="body1">Trusted</Typography>
                         </TableCell>
                         <TableCell align="right">
                             <Switch {...form.getInputProps("trusted", { type: "checkbox" })} size="small" />
+                        </TableCell>
+                    </TableRow>
+                    <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                        <TableCell component="th" scope="row">
+                            <Typography variant="body1">Maintenance</Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                            <Switch {...form.getInputProps("maintenance", { type: "checkbox" })} size="small" />
                         </TableCell>
                     </TableRow>
                     <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
