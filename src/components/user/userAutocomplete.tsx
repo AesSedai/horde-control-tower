@@ -33,7 +33,9 @@ export const UserAutocomplete = (): JSX.Element => {
             loadingText={"Loading users..."}
             getOptionLabel={(option) => option.username}
             isOptionEqualToValue={(option, value) => option.id === value.id}
-            renderInput={(params) => <TextField {...params} variant="standard" label="User Lookup" />}
+            // This shouldn't error because it's identical to the API guide, but w/e
+            // @ts-expect-error
+            renderInput={(params) => <TextField {...params} variant="standard" label="User Lookup" size="small" />}
             onChange={onChange}
         />
     )

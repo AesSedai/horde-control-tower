@@ -20,5 +20,5 @@ axiosBase.interceptors.request.use(
 )
 
 export const axiosLocal = axios.create({
-    baseURL: "http://localhost:3000"
+    baseURL: "/"
 })

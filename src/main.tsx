@@ -12,8 +12,8 @@ import { createRoot } from "react-dom/client"
 import { Provider } from "react-redux"
 import { PersistGate } from "redux-persist/integration/react"
 import { App } from "./App"
-import { persistor, store } from "./store/store"
 import "./main.css"
+import { persistor, store } from "./store/store"
 
 export const muiCache = createCache({
     key: "mui",
@@ -44,7 +44,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
                         <App />
                     </PersistGate>
                 </Provider>
-                <ReactQueryDevtools />
+                {import.meta.env.DEV ? <ReactQueryDevtools /> : null}
             </QueryClientProvider>
         </ThemeProvider>
     </CacheProvider>
