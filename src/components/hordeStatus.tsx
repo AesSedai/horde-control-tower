@@ -1,5 +1,5 @@
 import CircleIcon from "@mui/icons-material/Circle"
-import { Box, Typography } from "@mui/material"
+import { List, ListItem, ListItemIcon, ListItemText, Typography } from "@mui/material"
 import { useQuery } from "@tanstack/react-query"
 import { getStatusMode } from "../services/stableHorde"
 
@@ -24,18 +24,21 @@ export const HordeStatus = (): JSX.Element => {
     }
 
     return (
-        <Box sx={{ display: "flex" }}>
-            <Typography variant="h6" pr={2} display="flex" alignItems="center">
-                Maintenance {getCircle(data.maintenance_mode)}{" "}
-            </Typography>
-            <Typography variant="h6" pr={2} display="flex" alignItems="center">
-                Invite Only {getCircle(data.invite_only_mode)}{" "}
-            </Typography>
+        <List>
+            <ListItem>
+                <ListItemIcon>{getCircle(data.maintenance_mode)}</ListItemIcon>
+                <ListItemText primary={"Maintenance"} />
+            </ListItem>
+            <ListItem>
+                <ListItemIcon>{getCircle(data.invite_only_mode)}</ListItemIcon>
+                <ListItemText primary={"Invite Only"} />
+            </ListItem>
             {data.raid_mode != null ? (
-                <Typography variant="h6" pr={2} display="flex" alignItems="center">
-                    Raid {getCircle(data.raid_mode)}
-                </Typography>
+                <ListItem>
+                    <ListItemIcon>{getCircle(data.raid_mode)}</ListItemIcon>
+                    <ListItemText primary={"Raid"} />
+                </ListItem>
             ) : null}
-        </Box>
+        </List>
     )
 }

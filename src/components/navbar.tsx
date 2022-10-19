@@ -1,7 +1,9 @@
-import { alpha, AppBar, Box, InputBase, styled, Toolbar, Typography } from "@mui/material"
+import { alpha, AppBar, InputBase, styled, Toolbar, Typography } from "@mui/material"
+import { useQuery } from "@tanstack/react-query"
+import { isEmpty } from "radash"
+import { getFindUser } from "../services/stableHorde"
 import { setKey } from "../slices/persist"
 import { useAppDispatch, useAppSelector } from "../store/hooks"
-import { HordeStatus } from "./hordeStatus"
 
 const Wrapper = styled("div")(({ theme }) => ({
     position: "relative",
@@ -50,7 +52,7 @@ export const Navbar = (): JSX.Element => {
     }
 
     return (
-        <AppBar position="static">
+        <AppBar position="static" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
             <Toolbar>
                 <Typography
                     variant="h6"
@@ -59,9 +61,6 @@ export const Navbar = (): JSX.Element => {
                     sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}>
                     Horde Control Tower
                 </Typography>
-                <Box pr={2}>
-                    <HordeStatus />
-                </Box>
                 <Wrapper>
                     <StyledInputBase defaultValue={apiKey} placeholder="API Key" onBlur={onBlur} apikey={apiKey} />
                 </Wrapper>

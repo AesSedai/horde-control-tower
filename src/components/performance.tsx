@@ -1,4 +1,4 @@
-import { Paper, Typography } from "@mui/material"
+import { List, ListItem, ListItemText, Typography } from "@mui/material"
 import { useQuery } from "@tanstack/react-query"
 import { getStatusPerformance } from "../services/stableHorde"
 
@@ -15,11 +15,19 @@ export const Performance = (): JSX.Element => {
     }
 
     return (
-        <Paper elevation={1} sx={{ p: 2, height: "100%" }}>
-            <Typography variant="h6">Queued Requests: {data.queued_requests}</Typography>
-            <Typography variant="h6">Queued MPS: {data.queued_megapixelsteps}</Typography>
-            <Typography variant="h6">Past Minute MPS: {data.past_minute_megapixelsteps}</Typography>
-            <Typography variant="h6">Workers: {data.worker_count}</Typography>
-        </Paper>
+        <List>
+            <ListItem>
+                <ListItemText primary={`Queued Requests: ${data.queued_requests}`} />
+            </ListItem>
+            <ListItem>
+                <ListItemText primary={`Queued MPS: ${data.queued_megapixelsteps}`} />
+            </ListItem>
+            <ListItem>
+                <ListItemText primary={`Past Minute MPS: ${data.past_minute_megapixelsteps}`} />
+            </ListItem>
+            <ListItem>
+                <ListItemText primary={`Workers: ${data.worker_count}`} />
+            </ListItem>
+        </List>
     )
 }

@@ -1,8 +1,9 @@
-import { AxiosResponse } from "axios"
 import { GetStatusMode, GetStatusPerformance, GetUser, GetWorker, PutUser } from "../types/stableHorde/api"
 import { axiosBase, axiosLocal } from "../utils/axios"
 
 // Define a service using a base URL and expected endpoints
+export const getFindUser = (apikey: string): Promise<GetUser> =>
+    axiosBase.get("find_user", { headers: { apikey: apikey } })
 export const getStatusMode = (): Promise<GetStatusMode> =>
     axiosBase.get("status/modes").then((response) => response.data)
 export const getStatusPerformance = (): Promise<GetStatusPerformance> =>
