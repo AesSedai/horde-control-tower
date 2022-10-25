@@ -1,13 +1,12 @@
 import StarBorderIcon from "@mui/icons-material/StarBorder"
 import { Alert, Box, Button, Paper, Snackbar } from "@mui/material"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { AxiosResponse } from "axios"
 import { isEmpty } from "radash"
 import { useState } from "react"
+import { UserFormProvider, useUserForm } from "../../context/userFormContext"
 import { putUser, userKeys } from "../../services/stableHorde"
 import { useAppSelector } from "../../store/hooks"
 import { PutUser } from "../../types/stableHorde/api"
-import { UserFormProvider, useUserForm } from "../context/userFormContext"
 import { UserAutocomplete } from "./userAutocomplete"
 import { UserWrapper } from "./userWrapper"
 
@@ -23,12 +22,12 @@ export const UserLookup = (): JSX.Element => {
         }
     })
 
-    const mutation = useMutation<AxiosResponse<PutUser>, unknown, { id: number; data: PutUser }, unknown>(
+    const mutation = useMutation<PutUser, unknown, { id: number; data: PutUser }, unknown>(
         (data) => {
             return putUser(data.id, data.data)
         },
         {
-            onSuccess: ({ data }, vars) => {
+            onSuccess: (data, vars) => {
                 queryClient.setQueryData(userKeys.detail(vars.id), (old: PutUser | undefined) => {
                     if (old != null) {
                         return { ...old, ...data }
@@ -80,7 +79,6 @@ export const UserLookup = (): JSX.Element => {
                         }
                         mutation.mutate({ id: userId, data: data })
                     }
-                    console.log("values", values)
                 })}>
                 <Box display="flex" justifyContent="space-between">
                     <UserAutocomplete />

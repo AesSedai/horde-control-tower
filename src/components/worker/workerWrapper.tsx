@@ -11,8 +11,6 @@ export const WorkerWrapper = (props: Props): JSX.Element => {
 
     const { data } = useQuery(workerKeys.detail(workerId), () => getWorker(workerId), { staleTime: 1000 * 61 })
 
-    console.log("worker data", data)
-
     if (data == null) {
         return <></>
     }

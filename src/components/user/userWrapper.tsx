@@ -11,8 +11,8 @@ import {
 } from "@mui/material"
 import { useQuery } from "@tanstack/react-query"
 import { useEffect } from "react"
+import { useUserFormContext } from "../../context/userFormContext"
 import { getUser, userKeys } from "../../services/stableHorde"
-import { useUserFormContext } from "../context/userFormContext"
 
 interface Props {
     userId: number
@@ -20,7 +20,7 @@ interface Props {
 
 export const UserWrapper = (props: Props): JSX.Element => {
     const { userId } = props
-    const { data } = useQuery(userKeys.detail(userId), () => getUser(userId), { staleTime: 1000 * 61 })
+    const { data } = useQuery(userKeys.detail(userId), () => getUser(userId), { refetchInterval: 1000 * 15 })
     const form = useUserFormContext()
 
     useEffect(() => {

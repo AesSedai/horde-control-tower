@@ -1,11 +1,16 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { getUsers, userKeys } from "../services/stableHorde"
+import { useQuery } from "@tanstack/react-query"
+import { getStatusMode, getStatusPerformance, getUsers, userKeys } from "../services/stableHorde"
 
 export const BackgroundQueries = (): JSX.Element => {
-    const queryClient = useQueryClient()
-    const { data, isLoading, error } = useQuery(userKeys.all, getUsers, {
-        staleTime: 1000 * 61
+    const users = useQuery(userKeys.all, getUsers, {
+        staleTime: 1000 * 30,
+        refetchInterval: 1000 * 30
     })
+    const performance = useQuery(["performance"], getStatusPerformance, {
+        staleTime: 1000 * 30,
+        refetchInterval: 1000 * 30
+    })
+    const mode = useQuery(["mode"], getStatusMode, { staleTime: 1000 * 30, refetchInterval: 1000 * 30 })
 
     return <></>
 }

@@ -1,10 +1,10 @@
 import CircleIcon from "@mui/icons-material/Circle"
 import { List, ListItem, ListItemIcon, ListItemText, Typography } from "@mui/material"
 import { useQuery } from "@tanstack/react-query"
-import { getStatusMode } from "../services/stableHorde"
+import { getStatusMode } from "../../services/stableHorde"
 
 export const HordeStatus = (): JSX.Element => {
-    const { data, isLoading, error } = useQuery(["mode"], getStatusMode, { staleTime: 1000 * 61 })
+    const { data, isLoading, error } = useQuery(["mode"], getStatusMode)
 
     if (isLoading) {
         return <Typography variant="h6">Loading Horde status ...</Typography>

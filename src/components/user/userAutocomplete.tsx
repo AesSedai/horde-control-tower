@@ -8,7 +8,7 @@ import { GetUser } from "../../types/stableHorde/api"
 export const UserAutocomplete = (): JSX.Element => {
     const dispatch = useAppDispatch()
 
-    const { data } = useQuery(userKeys.all, getUsers, { staleTime: 1000 * 61 })
+    const { data } = useQuery(userKeys.all, getUsers)
 
     if (data == null) {
         return <></>

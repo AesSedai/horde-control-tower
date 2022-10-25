@@ -1,9 +1,9 @@
 import { List, ListItem, ListItemText, Typography } from "@mui/material"
 import { useQuery } from "@tanstack/react-query"
-import { getStatusPerformance } from "../services/stableHorde"
+import { getStatusPerformance } from "../../services/stableHorde"
 
 export const Performance = (): JSX.Element => {
-    const { data, isLoading, error } = useQuery(["performance"], getStatusPerformance, { staleTime: 1000 * 61 })
+    const { data, isLoading, error } = useQuery(["performance"], getStatusPerformance)
 
     if (isLoading) {
         return <Typography variant="h6">Loading Horde status ...</Typography>

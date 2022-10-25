@@ -1,7 +1,4 @@
 import { alpha, AppBar, InputBase, styled, Toolbar, Typography } from "@mui/material"
-import { useQuery } from "@tanstack/react-query"
-import { isEmpty } from "radash"
-import { getFindUser } from "../services/stableHorde"
 import { setKey } from "../slices/persist"
 import { useAppDispatch, useAppSelector } from "../store/hooks"
 
