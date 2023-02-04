@@ -2,6 +2,7 @@ import { createFormContext } from "@mantine/form"
 
 interface UserFormValues {
     trusted: boolean
+    flagged: boolean
     worker_invite: string
 }
 

@@ -18,6 +18,7 @@ export const UserLookup = (): JSX.Element => {
     const form = useUserForm({
         initialValues: {
             trusted: false,
+            flagged: false,
             worker_invite: "0"
         }
     })
@@ -39,6 +40,7 @@ export const UserLookup = (): JSX.Element => {
                 // update the form to reflect new state
                 const toSet = {
                     trusted: data.trusted ?? false,
+                    flagged: data.flagged ?? false,
                     worker_invite: data.worker_invite?.toString() ?? "0"
                 }
                 if (!isEmpty(toSet)) {
@@ -75,6 +77,7 @@ export const UserLookup = (): JSX.Element => {
                     if (userId != null) {
                         const data: PutUser = {
                             trusted: values.trusted,
+                            flagged: values.flagged,
                             worker_invite: parseInt(values.worker_invite)
                         }
                         mutation.mutate({ id: userId, data: data })

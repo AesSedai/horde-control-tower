@@ -24,7 +24,7 @@ export const UserWrapper = (props: Props): JSX.Element => {
     const queryClient = useQueryClient()
 
     const { userId } = props
-    const { data } = useQuery(userKeys.detail(userId), () => getUser(userId), { refetchInterval: 1000 * 15 })
+    const { data, isInitialLoading } = useQuery(userKeys.detail(userId), () => getUser(userId), { refetchInterval: 1000 * 15 })
 
     const mutation = useMutation<PutUser, unknown, { id: number; data: PutUser }, unknown>(
         (data) => {
@@ -43,12 +43,13 @@ export const UserWrapper = (props: Props): JSX.Element => {
         if (data != null) {
             const toSet = {
                 trusted: data.trusted,
+                flagged: data.flagged,
                 worker_invite: data.worker_invited.toString()
             }
             form.setValues(toSet)
             form.resetDirty(toSet)
         }
-    }, [data, userId])
+    }, [isInitialLoading])
 
     if (data == null) {
         return <></>
@@ -74,6 +75,14 @@ export const UserWrapper = (props: Props): JSX.Element => {
                         </TableCell>
                         <TableCell align="right">
                             <Switch {...form.getInputProps("trusted", { type: "checkbox" })} size="small" />
+                        </TableCell>
+                    </TableRow>
+                    <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                        <TableCell component="th" scope="row">
+                            <Typography variant="body1">Flagged</Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                            <Switch {...form.getInputProps("flagged", { type: "checkbox" })} size="small" />
                         </TableCell>
                     </TableRow>
                     <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
