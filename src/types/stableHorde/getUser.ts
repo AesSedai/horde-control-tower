@@ -12,6 +12,7 @@ export interface GetUser {
         admin: number
         received: number
         recurring: number
+        awarded: number
     }
     worker_count: number
     worker_ids: string[]
@@ -20,7 +21,11 @@ export interface GetUser {
         last_received: string
     }
     trusted: boolean
+    flagged: boolean
     suspicious: number
+    pseudonymous: boolean
+    contact: string
+    account_age: number
     usage: {
         requests: number
         megapixelsteps: number

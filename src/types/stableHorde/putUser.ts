@@ -8,4 +8,6 @@ export type PutUser = Partial<{
     username: string
     monthly_kudos: number
     trusted: boolean
+    reset_suspicion: boolean
+    contact: string
 }>

@@ -1,3 +1,4 @@
+import { LoadingButton } from "@mui/lab"
 import {
     Box,
     Switch,
@@ -9,18 +10,33 @@ import {
     TextField,
     Typography
 } from "@mui/material"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { useUserFormContext } from "../../context/userFormContext"
-import { getUser, userKeys } from "../../services/stableHorde"
+import { getUser, putUser, userKeys } from "../../services/stableHorde"
+import { PutUser } from "../../types/stableHorde/putUser"
 
 interface Props {
     userId: number
 }
 
 export const UserWrapper = (props: Props): JSX.Element => {
+    const queryClient = useQueryClient()
+
     const { userId } = props
     const { data } = useQuery(userKeys.detail(userId), () => getUser(userId), { refetchInterval: 1000 * 15 })
+
+    const mutation = useMutation<PutUser, unknown, { id: number; data: PutUser }, unknown>(
+        (data) => {
+            return putUser(data.id, data.data)
+        },
+        {
+            onSuccess: (data, vars) => {
+                queryClient.invalidateQueries({ queryKey: userKeys.detail(vars.id) })
+            }
+        }
+    )
+
     const form = useUserFormContext()
 
     useEffect(() => {
@@ -104,8 +120,32 @@ export const UserWrapper = (props: Props): JSX.Element => {
                         <TableCell component="th" scope="row">
                             <Typography variant="body1">Suspicious</Typography>
                         </TableCell>
-                        <TableCell align="right">
-                            <Typography variant="body1">{data.suspicious}</Typography>
+                        <TableCell
+                            sx={{
+                                display: "flex",
+                                flex: "1 1 0",
+                                alignItems: "center",
+                                justifyContent: "flex-end",
+                                flexDirection: "row"
+                            }}>
+                            {data.suspicious > 0 ? (
+                                <LoadingButton
+                                    onClick={async () => {
+                                        const data: PutUser = {
+                                            reset_suspicion: true
+                                        }
+                                        mutation.mutate({ id: userId, data: data })
+                                    }}
+                                    loading={mutation.isLoading}
+                                    variant="contained"
+                                    color="error"
+                                    sx={{ order: 0, mr: 4 }}>
+                                    Reset
+                                </LoadingButton>
+                            ) : null}
+                            <Typography sx={{ order: 1 }} variant="body1">
+                                {data.suspicious}
+                            </Typography>
                         </TableCell>
                     </TableRow>
                 </TableBody>
