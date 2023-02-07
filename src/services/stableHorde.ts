@@ -1,5 +1,13 @@
-import { GetStatusMode, GetStatusPerformance, GetUser, GetWorker, PutUser } from "../types/stableHorde/api"
-import { PutWorker } from "../types/stableHorde/putWorker"
+import {
+    GetStatusMode,
+    GetStatusPerformance,
+    GetUser,
+    GetWorker,
+    PostFilters,
+    PostFiltersPayload,
+    PutUser,
+    PutWorker
+} from "../types/stableHorde/api"
 import { axiosBase, axiosLocal } from "../utils/axios"
 
 // Define a service using a base URL and expected endpoints
@@ -15,8 +23,13 @@ export const getWorkers = (): Promise<GetWorker[]> => axiosBase.get("workers").t
 export const getWorker = (id: string): Promise<GetWorker> =>
     axiosBase.get(`workers/${id}`).then((response) => response.data)
 
-export const putUser = <T extends PutUser>(id: number, payload: T): Promise<T> => axiosBase.put(`users/${id}`, payload).then((response) => response.data)
-export const putWorker = <T extends PutWorker>(id: string, payload: T): Promise<T> => axiosBase.put(`workers/${id}`, payload).then((response) => response.data)
+export const putUser = <T extends PutUser>(id: number, payload: T): Promise<T> =>
+    axiosBase.put(`users/${id}`, payload).then((response) => response.data)
+export const putWorker = <T extends PutWorker>(id: string, payload: T): Promise<T> =>
+    axiosBase.put(`workers/${id}`, payload).then((response) => response.data)
+
+export const postFilters = (payload: PostFiltersPayload): Promise<PostFilters> =>
+    axiosBase.post("filters", payload).then((response) => response.data)
 
 export const userKeys = {
     all: ["users"] as const,

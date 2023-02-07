@@ -18,7 +18,7 @@ export const WorkerBox = (props: Props): JSX.Element => {
 
     if (data.worker_ids.length === 0) {
         return (
-            <Grid item xs={3}>
+            <Grid item md={12} lg={6} xl={4}>
                 <Typography variant="body1">This user has no workers.</Typography>
             </Grid>
         )
@@ -27,7 +27,7 @@ export const WorkerBox = (props: Props): JSX.Element => {
     return (
         <>
             {data.worker_ids.map((workerId) => (
-                <Grid item xs={3} key={workerId}>
+                <Grid item md={12} lg={6} xl={4} key={workerId}>
                     <WorkerWrapper workerId={workerId} />
                 </Grid>
             ))}

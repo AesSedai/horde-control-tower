@@ -25,8 +25,6 @@ export const UserAutocomplete = (): JSX.Element => {
         }
     }, [debounced])
 
-    console.log("userData", userData)
-
     if (data == null) {
         return <></>
     }

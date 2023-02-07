@@ -1,12 +1,10 @@
-import { Box, CircularProgress, Grid, Typography } from "@mui/material"
+import { Box, CircularProgress, Typography } from "@mui/material"
 import { useQuery } from "@tanstack/react-query"
 import { isEmpty } from "radash"
 import { useEffect } from "react"
 import { BackgroundQueries } from "./components/background"
+import { Layout } from "./components/layout"
 import { Navbar } from "./components/navbar"
-import { Sidebar } from "./components/sidebar/sidebar"
-import { UserLookup } from "./components/user/userLookup"
-import { WorkerBox } from "./components/worker/workerBox"
 import { getFindUser } from "./services/stableHorde"
 import { useAppSelector } from "./store/hooks"
 
@@ -15,8 +13,6 @@ export const App = (): JSX.Element => {
     const { data, refetch, isLoading } = useQuery(["findUser"], () => getFindUser(apiKey), {
         enabled: !isEmpty(apiKey)
     })
-
-    const userId = useAppSelector((state) => state.localState.selectedUser)
 
     useEffect(() => {
         refetch()
@@ -61,15 +57,7 @@ export const App = (): JSX.Element => {
         <Box sx={{ display: "flex", flexDirection: "column" }}>
             <BackgroundQueries />
             <Navbar />
-            <Box display="flex">
-                <Sidebar />
-                <Grid container spacing={2} p={2}>
-                    <Grid item xs={3}>
-                        <UserLookup />
-                    </Grid>
-                    {userId != null ? <WorkerBox userId={userId}></WorkerBox> : null}
-                </Grid>
-            </Box>
+            <Layout />
         </Box>
     )
 }
