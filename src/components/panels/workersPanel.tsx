@@ -12,6 +12,7 @@ import {
     Typography
 } from "@mui/material"
 import { useQuery } from "@tanstack/react-query"
+import { isString, orderBy } from "lodash-es"
 import { useState } from "react"
 import { getWorkers, workerKeys } from "../../services/stableHorde"
 import { GetWorker } from "../../types/stableHorde/getWorker"
@@ -26,11 +27,22 @@ export const WorkersPanel = (): JSX.Element => {
         select: (data) => {
             const dir = order === "asc" ? 1 : -1
             // sort the data, strip MPS from name
-            return data
-                .map((worker) => {
+            return orderBy(
+                data.map((worker) => {
                     return { ...worker, performance: worker.performance.replace(" megapixelsteps per second", "") }
-                })
-                .sort((a, b) => (a[sortKey] > b[sortKey] ? dir : -dir))
+                }),
+                [
+                    (worker) => {
+                        const value = worker[sortKey]
+                        if (isString(value)) {
+                            return value.toLowerCase()
+                        } else {
+                            return value
+                        }
+                    }
+                ],
+                [order]
+            )
         }
     })
 

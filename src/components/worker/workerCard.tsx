@@ -27,7 +27,7 @@ import {
     Typography
 } from "@mui/material"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { isEmpty } from "lodash-es"
+import { isEmpty, orderBy } from "lodash-es"
 import { Duration } from "luxon"
 import { useState } from "react"
 import { putWorker, workerKeys } from "../../services/stableHorde"
@@ -242,7 +242,7 @@ export const WorkerCard = (props: Props): JSX.Element => {
                     <>
                         <DialogTitle>"{worker.name}" Models</DialogTitle>
                         <DialogContent>
-                            <Typography variant="body1">{worker.models.sort().join(", ")}</Typography>
+                            <Typography variant="body1">{orderBy(worker.models, [model => model.toLowerCase()]).join(", ")}</Typography>
                         </DialogContent>
                     </>
                 )

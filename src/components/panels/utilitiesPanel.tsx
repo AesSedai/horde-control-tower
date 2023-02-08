@@ -1,5 +1,5 @@
 import { Grid } from "@mui/material"
-import { PromptCheck } from "../utilities/PromptCheck"
+import { PromptCheck } from "../utilities/promptCheck"
 
 export const UtilitiesPanel = (): JSX.Element => {
     return (

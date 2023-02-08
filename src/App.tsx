@@ -5,13 +5,15 @@ import { useEffect } from "react"
 import { BackgroundQueries } from "./components/background"
 import { Layout } from "./components/layout"
 import { Navbar } from "./components/navbar"
+import { ApiInput } from "./components/utilities/apiInput"
 import { getFindUser } from "./services/stableHorde"
 import { useAppSelector } from "./store/hooks"
 
 export const App = (): JSX.Element => {
     const apiKey = useAppSelector((state) => state.persist.apikey)
     const { data, refetch, isLoading } = useQuery(["findUser"], () => getFindUser(apiKey), {
-        enabled: !isEmpty(apiKey)
+        enabled: !isEmpty(apiKey),
+        retry: 1
     })
 
     useEffect(() => {
@@ -33,8 +35,9 @@ export const App = (): JSX.Element => {
         return (
             <Box display="flex" flexDirection="column" sx={{ height: "100%" }}>
                 <Navbar />
-                <Box sx={{ display: "flex", flex: "1 1 auto" }} justifyContent="center" alignItems="center">
-                    <Typography variant="h4">Please enter your API key above.</Typography>
+                <Box display="flex" flex="1 1 auto" flexDirection="column" justifyContent="center" alignItems="center">
+                    <Typography variant="h4">Please enter your API key.</Typography>
+                    <ApiInput />
                 </Box>
             </Box>
         )
