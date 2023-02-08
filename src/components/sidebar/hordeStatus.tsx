@@ -2,6 +2,7 @@ import CircleIcon from "@mui/icons-material/Circle"
 import { List, ListItem, ListItemIcon, ListItemText, Typography } from "@mui/material"
 import { useQuery } from "@tanstack/react-query"
 import { getStatusMode } from "../../services/stableHorde"
+import { bad, good } from "../../utils/colors"
 
 export const HordeStatus = (): JSX.Element => {
     const { data, isLoading, error } = useQuery(["mode"], getStatusMode)
@@ -17,9 +18,9 @@ export const HordeStatus = (): JSX.Element => {
 
     const getCircle = (val: boolean): JSX.Element => {
         if (val) {
-            return <CircleIcon sx={{ color: "red", ml: 1 }} />
+            return <CircleIcon sx={{ color: bad, ml: 1 }} />
         } else {
-            return <CircleIcon sx={{ color: "green", ml: 1 }} />
+            return <CircleIcon sx={{ color: good, ml: 1 }} />
         }
     }
 

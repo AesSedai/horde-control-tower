@@ -13,6 +13,7 @@ import { Provider } from "react-redux"
 import { PersistGate } from "redux-persist/integration/react"
 import { App } from "./App"
 import "./index.css"
+import "./utils/monkeypatchDuration"
 import { persistor, store } from "./store/store"
 
 export const muiCache = createCache({

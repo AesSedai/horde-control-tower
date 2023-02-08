@@ -27,9 +27,7 @@ export const WorkerBox = (props: Props): JSX.Element => {
     return (
         <>
             {data.worker_ids.map((workerId) => (
-                <Grid item md={12} lg={6} xl={4} key={workerId}>
-                    <WorkerWrapper workerId={workerId} />
-                </Grid>
+                <WorkerWrapper key={workerId} workerId={workerId} />
             ))}
         </>
     )

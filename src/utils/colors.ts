@@ -1,0 +1,5 @@
+export const good = "#0583B0"
+export const bad = "#FF6962"
+export const badBackground = "#7c0500"
+export const warn = "#ffd800"
+export const warnBackground = "#ef9b0f"

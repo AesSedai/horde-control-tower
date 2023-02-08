@@ -1,7 +1,7 @@
 import StarBorderIcon from "@mui/icons-material/StarBorder"
 import { Alert, Box, Button, Paper, Snackbar } from "@mui/material"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { isEmpty } from "radash"
+import { isEmpty } from "lodash-es"
 import { useState } from "react"
 import { UserFormProvider, useUserForm } from "../../context/userFormContext"
 import { putUser, userKeys } from "../../services/stableHorde"

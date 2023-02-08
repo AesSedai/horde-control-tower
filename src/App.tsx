@@ -1,6 +1,6 @@
 import { Box, CircularProgress, Typography } from "@mui/material"
 import { useQuery } from "@tanstack/react-query"
-import { isEmpty } from "radash"
+import { isEmpty } from "lodash-es"
 import { useEffect } from "react"
 import { BackgroundQueries } from "./components/background"
 import { Layout } from "./components/layout"
