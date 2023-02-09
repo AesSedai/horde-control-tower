@@ -1,4 +1,5 @@
-import { Box, Button, Paper, TextField, Typography } from "@mui/material"
+import { LoadingButton } from "@mui/lab"
+import { Box, Paper, TextField, Typography } from "@mui/material"
 import { useQuery } from "@tanstack/react-query"
 import { isEmpty } from "lodash-es"
 import { useState } from "react"
@@ -7,18 +8,16 @@ import { postFilters } from "../../services/stableHorde"
 export const PromptCheck = (): JSX.Element => {
     const [value, setValue] = useState("")
 
-    const { data, refetch } = useQuery(["promptCheck", value], () => postFilters({ filter_type: 0, prompt: value }), {
-        enabled: false
-    })
+    const { data, refetch, isFetching } = useQuery(
+        ["promptCheck", value],
+        () => postFilters({ filter_type: 0, prompt: value }),
+        {
+            enabled: false
+        }
+    )
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setValue(event.target.value)
-    }
-
-    const handleSubmit = () => {
-        if (!isEmpty(value)) {
-            refetch()
-        }
     }
 
     return (
@@ -26,11 +25,20 @@ export const PromptCheck = (): JSX.Element => {
             <Box>
                 <Box display="flex" justifyContent="space-between">
                     <Typography variant="h4">Prompt Checker</Typography>
-                    <Button variant="contained" onClick={handleSubmit}>
+
+                    <LoadingButton
+                        onClick={() => {
+                            if (!isEmpty(value)) {
+                                refetch()
+                            }
+                        }}
+                        loading={isFetching}
+                        variant="contained">
                         Submit
-                    </Button>
+                    </LoadingButton>
                 </Box>
                 <TextField
+                    sx={{ my: 2 }}
                     variant="standard"
                     multiline
                     fullWidth

@@ -10,8 +10,7 @@ import { Sidebar } from "./sidebar/sidebar"
 const tabItems = {
     "1": <UserPanel />,
     "2": <WorkersPanel />,
-    "3": <UtilitiesPanel />,
-    "4": <SettingsPanel />
+    "3": <UtilitiesPanel />
 }
 
 export const Layout = (): JSX.Element => {
@@ -35,10 +34,17 @@ export const Layout = (): JSX.Element => {
                         </TabList>
                     </Box>
                     {/* This is a bad hack to keep tabs from unmounting on switch */}
-                    <TabPanel value={tab}>
+                    <TabPanel value={["1", "2", "3"].includes(tab) ? tab : ""}>
                         {Object.entries(tabItems).map(([key, component]) => {
-                            return <div key={key} style={{ display: key === tab ? "block" : "none" }}>{component}</div>
+                            return (
+                                <div key={key} style={{ display: key === tab ? "block" : "none" }}>
+                                    {component}
+                                </div>
+                            )
                         })}
+                    </TabPanel>
+                    <TabPanel value={"4"}>
+                        <SettingsPanel />
                     </TabPanel>
                 </TabContext>
             </Box>

@@ -15,22 +15,38 @@ import { useQuery } from "@tanstack/react-query"
 import { isString, orderBy } from "lodash-es"
 import { useState } from "react"
 import { getWorkers, workerKeys } from "../../services/stableHorde"
+import { useAppSelector } from "../../store/hooks"
 import { GetWorker } from "../../types/stableHorde/getWorker"
 import { WorkerCard } from "../worker/workerCard"
+import { WorkerFilter } from "../worker/workerFilter"
 
 export const WorkersPanel = (): JSX.Element => {
     const [sortKey, setSortKey] = useState<keyof GetWorker>("name")
     const [order, setOrder] = useState<"asc" | "desc">("asc")
+    const workerFilter = useAppSelector((state) => state.localState.workerFilter)
 
     const { data } = useQuery(workerKeys.all, () => getWorkers(), {
         refetchInterval: 1000 * 30,
         select: (data) => {
-            const dir = order === "asc" ? 1 : -1
             // sort the data, strip MPS from name
+            const filter = workerFilter?.toLowerCase()
+
             return orderBy(
-                data.map((worker) => {
-                    return { ...worker, performance: worker.performance.replace(" megapixelsteps per second", "") }
-                }),
+                data
+                    .filter((worker) => {
+                        if (filter == null) {
+                            return true
+                        } else {
+                            return (
+                                worker.name.toLowerCase().includes(filter) ||
+                                (worker.owner ?? "").toLowerCase().includes(filter) ||
+                                worker.id.toLowerCase().includes(filter)
+                            )
+                        }
+                    })
+                    .map((worker) => {
+                        return { ...worker, performance: worker.performance.replace(" megapixelsteps per second", "") }
+                    }),
                 [
                     (worker) => {
                         const value = worker[sortKey]
@@ -46,7 +62,6 @@ export const WorkersPanel = (): JSX.Element => {
         }
     })
 
-    // order: keyof GetWorker
     const changeSortKey = (event: SelectChangeEvent<keyof GetWorker>) => {
         setSortKey(event.target.value as keyof GetWorker)
     }
@@ -62,10 +77,13 @@ export const WorkersPanel = (): JSX.Element => {
     return (
         <>
             <Box display="flex" justifyContent="space-between" pb={2}>
-                <Box>
-                    <Typography variant="h5">Worker List</Typography>
+                <Box display="flex" alignItems="center">
+                    <Typography variant="h5" sx={{ mr: 2 }}>
+                        Worker List
+                    </Typography>
+                    <WorkerFilter />
                 </Box>
-                <Box display="flex" justifyContent="flex-end">
+                <Box display="flex" justifyContent="flex-end" alignItems="center">
                     <FormControl sx={{ mr: 1 }}>
                         <InputLabel>Sort Key</InputLabel>
                         <Select
@@ -74,8 +92,9 @@ export const WorkersPanel = (): JSX.Element => {
                             onChange={changeSortKey}
                             sx={{ ".MuiSelect-select": { py: 1 } }}>
                             <MenuItem value={"name"}>Name</MenuItem>
+                            <MenuItem value={"performance"}>Performance</MenuItem>
                             <MenuItem value={"uptime"}>Uptime</MenuItem>
-                            <MenuItem value={"megapixelsteps_generated"}>MPS</MenuItem>
+                            <MenuItem value={"megapixelsteps_generated"}>MPS Generated</MenuItem>
                         </Select>
                     </FormControl>
                     {order === "asc" ? (

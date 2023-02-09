@@ -27,7 +27,7 @@ import {
     Typography
 } from "@mui/material"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { isEmpty, orderBy } from "lodash-es"
+import { isEmpty, orderBy, truncate } from "lodash-es"
 import { Duration } from "luxon"
 import { useState } from "react"
 import { putWorker, workerKeys } from "../../services/stableHorde"
@@ -309,10 +309,12 @@ export const WorkerCard = (props: Props): JSX.Element => {
                                 ) : null}
                             </Box>
                         }
-                        title={<Typography variant="h5">{worker.name}</Typography>}
+                        title={<Typography variant="h5">{truncate(worker.name, {length: 30})}</Typography>}
                         subheader={worker.id}
                     />
                     <CardContent>
+                        <Typography variant="body2">Full Name: {worker.name}</Typography>
+                        <Typography variant="body2">Owner: {worker.owner}</Typography>
                         <Typography variant="body2">
                             Uptime: {Duration.fromObject({ seconds: worker.uptime }).toHuman()}
                         </Typography>
