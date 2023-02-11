@@ -1,5 +1,5 @@
 import axios from "axios"
-import { store } from "../store/store"
+import { store } from "../components/redux/store/store"
 
 export const axiosBase = axios.create({
     baseURL: "https://stablehorde.net/api/v2/"

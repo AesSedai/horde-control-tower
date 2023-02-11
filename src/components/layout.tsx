@@ -1,23 +1,23 @@
 import { TabContext, TabList, TabPanel } from "@mui/lab"
 import { Box, Tab } from "@mui/material"
-import { useState } from "react"
 import { SettingsPanel } from "./panels/settingsPanel"
 import { UserPanel } from "./panels/userPanel"
 import { UtilitiesPanel } from "./panels/utilitiesPanel"
 import { WorkersPanel } from "./panels/workersPanel"
+import { setSelectedTab } from "./redux/slices/persistState"
+import { setShowPassword } from "./redux/slices/settingsPanelState"
+import { useAppDispatch, useAppSelector } from "./redux/store/hooks"
 import { Sidebar } from "./sidebar/sidebar"
 
-const tabItems = {
-    "1": <UserPanel />,
-    "2": <WorkersPanel />,
-    "3": <UtilitiesPanel />
-}
-
 export const Layout = (): JSX.Element => {
-    const [tab, setTab] = useState<keyof typeof tabItems>("2")
+    const dispatch = useAppDispatch()
+    const tab = useAppSelector((state) => state.persist.selectedTab)
 
-    const handleChange = (event: React.SyntheticEvent, newTab: keyof typeof tabItems) => {
-        setTab(newTab)
+    const handleChange = (event: React.SyntheticEvent, newTab: string) => {
+        if (newTab != "4") {
+            dispatch(setShowPassword(false))
+        }
+        dispatch(setSelectedTab(newTab))
     }
 
     return (
@@ -33,15 +33,14 @@ export const Layout = (): JSX.Element => {
                             <Tab label="Settings" value="4" />
                         </TabList>
                     </Box>
-                    {/* This is a bad hack to keep tabs from unmounting on switch */}
-                    <TabPanel value={["1", "2", "3"].includes(tab) ? tab : ""}>
-                        {Object.entries(tabItems).map(([key, component]) => {
-                            return (
-                                <div key={key} style={{ display: key === tab ? "block" : "none" }}>
-                                    {component}
-                                </div>
-                            )
-                        })}
+                    <TabPanel value={"1"}>
+                        <UserPanel />
+                    </TabPanel>
+                    <TabPanel value={"2"}>
+                        <WorkersPanel />
+                    </TabPanel>
+                    <TabPanel value={"3"}>
+                        <UtilitiesPanel />
                     </TabPanel>
                     <TabPanel value={"4"}>
                         <SettingsPanel />

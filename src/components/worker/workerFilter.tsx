@@ -1,12 +1,13 @@
 import { useDebouncedValue } from "@mantine/hooks"
 import { TextField } from "@mui/material"
 import { useEffect, useState } from "react"
-import { setWorkerFilter } from "../../slices/localState"
-import { useAppDispatch } from "../../store/hooks"
+import { setWorkerFilter } from "../redux/slices/workerPanelState"
+import { useAppDispatch, useAppSelector } from "../redux/store/hooks"
 
 export const WorkerFilter = (): JSX.Element => {
-    const [filter, setFilter] = useState("")
-    const [debounced] = useDebouncedValue(filter, 400);
+    const workerFilter = useAppSelector((state) => state.workerPanel.workerFilter)
+    const [filter, setFilter] = useState(workerFilter ?? "")
+    const [debounced] = useDebouncedValue(filter, 400)
     const dispatch = useAppDispatch()
 
     useEffect(() => {

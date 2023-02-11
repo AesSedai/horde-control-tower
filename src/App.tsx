@@ -5,9 +5,9 @@ import { useEffect } from "react"
 import { BackgroundQueries } from "./components/background"
 import { Layout } from "./components/layout"
 import { Navbar } from "./components/navbar"
+import { useAppSelector } from "./components/redux/store/hooks"
 import { ApiInput } from "./components/utilities/apiInput"
 import { getFindUser } from "./services/stableHorde"
-import { useAppSelector } from "./store/hooks"
 
 export const App = (): JSX.Element => {
     const apiKey = useAppSelector((state) => state.persist.apikey)

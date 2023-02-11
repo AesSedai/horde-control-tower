@@ -13,17 +13,18 @@ import {
 } from "@mui/material"
 import { useQuery } from "@tanstack/react-query"
 import { isString, orderBy } from "lodash-es"
-import { useState } from "react"
 import { getWorkers, workerKeys } from "../../services/stableHorde"
-import { useAppSelector } from "../../store/hooks"
 import { GetWorker } from "../../types/stableHorde/getWorker"
+import { setOrder, setSortKey } from "../redux/slices/workerPanelState"
+import { useAppDispatch, useAppSelector } from "../redux/store/hooks"
 import { WorkerCard } from "../worker/workerCard"
 import { WorkerFilter } from "../worker/workerFilter"
 
 export const WorkersPanel = (): JSX.Element => {
-    const [sortKey, setSortKey] = useState<keyof GetWorker>("name")
-    const [order, setOrder] = useState<"asc" | "desc">("asc")
-    const workerFilter = useAppSelector((state) => state.localState.workerFilter)
+    const dispatch = useAppDispatch()
+    const sortKey = useAppSelector((state) => state.workerPanel.sortKey)
+    const order = useAppSelector((state) => state.workerPanel.order)
+    const workerFilter = useAppSelector((state) => state.workerPanel.workerFilter)
 
     const { data } = useQuery(workerKeys.all, () => getWorkers(), {
         refetchInterval: 1000 * 30,
@@ -63,11 +64,11 @@ export const WorkersPanel = (): JSX.Element => {
     })
 
     const changeSortKey = (event: SelectChangeEvent<keyof GetWorker>) => {
-        setSortKey(event.target.value as keyof GetWorker)
+        dispatch(setSortKey(event.target.value as keyof GetWorker))
     }
 
     const changeSortOrder = (order: "asc" | "desc") => {
-        setOrder(order)
+        dispatch(setOrder(order))
     }
 
     if (data == null) {

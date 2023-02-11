@@ -2,22 +2,24 @@ import { LoadingButton } from "@mui/lab"
 import { Box, Paper, TextField, Typography } from "@mui/material"
 import { useQuery } from "@tanstack/react-query"
 import { isEmpty } from "lodash-es"
-import { useState } from "react"
 import { postFilters } from "../../services/stableHorde"
+import { setPrompt } from "../redux/slices/utilityPanelState"
+import { useAppDispatch, useAppSelector } from "../redux/store/hooks"
 
 export const PromptCheck = (): JSX.Element => {
-    const [value, setValue] = useState("")
+    const dispatch = useAppDispatch()
+    const prompt = useAppSelector((state) => state.utilityPanel.prompt)
 
     const { data, refetch, isFetching } = useQuery(
-        ["promptCheck", value],
-        () => postFilters({ filter_type: 0, prompt: value }),
+        ["promptCheck", prompt],
+        () => postFilters({ filter_type: 0, prompt: prompt }),
         {
             enabled: false
         }
     )
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setValue(event.target.value)
+        dispatch(setPrompt(event.target.value))
     }
 
     return (
@@ -28,7 +30,7 @@ export const PromptCheck = (): JSX.Element => {
 
                     <LoadingButton
                         onClick={() => {
-                            if (!isEmpty(value)) {
+                            if (!isEmpty(prompt)) {
                                 refetch()
                             }
                         }}
@@ -42,7 +44,7 @@ export const PromptCheck = (): JSX.Element => {
                     variant="standard"
                     multiline
                     fullWidth
-                    value={value}
+                    value={prompt}
                     onChange={handleChange}
                     placeholder="Enter prompt"
                 />

@@ -15,16 +15,15 @@ import { useEffect } from "react"
 import { useUserFormContext } from "../../context/userFormContext"
 import { getUser, putUser, userKeys } from "../../services/stableHorde"
 import { PutUser } from "../../types/stableHorde/putUser"
+import { useAppSelector } from "../redux/store/hooks"
 
-interface Props {
-    userId: number
-}
-
-export const UserWrapper = (props: Props): JSX.Element => {
+export const UserWrapper = (): JSX.Element => {
+    const userId = useAppSelector((state) => state.userPanel.selectedUser ?? -1)
     const queryClient = useQueryClient()
 
-    const { userId } = props
-    const { data, isInitialLoading } = useQuery(userKeys.detail(userId), () => getUser(userId), { refetchInterval: 1000 * 15 })
+    const { data, isInitialLoading } = useQuery(userKeys.detail(userId), () => getUser(userId), {
+        refetchInterval: 1000 * 15
+    })
 
     const mutation = useMutation<PutUser, unknown, { id: number; data: PutUser }, unknown>(
         (data) => {

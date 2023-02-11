@@ -5,14 +5,14 @@ import { isEmpty } from "lodash-es"
 import { useState } from "react"
 import { UserFormProvider, useUserForm } from "../../context/userFormContext"
 import { putUser, userKeys } from "../../services/stableHorde"
-import { useAppSelector } from "../../store/hooks"
 import { PutUser } from "../../types/stableHorde/api"
+import { useAppSelector } from "../redux/store/hooks"
 import { UserAutocomplete } from "./userAutocomplete"
 import { UserWrapper } from "./userWrapper"
 
 export const UserLookup = (): JSX.Element => {
     const queryClient = useQueryClient()
-    const userId = useAppSelector((state) => state.localState.selectedUser)
+    const userId = useAppSelector((state) => state.userPanel.selectedUser)
     const [open, setOpen] = useState(false)
 
     const form = useUserForm({
@@ -98,7 +98,7 @@ export const UserLookup = (): JSX.Element => {
                     ) : null}
                 </Box>
                 <UserFormProvider form={form}>
-                    <Box display="flex">{userId != null ? <UserWrapper userId={userId} /> : null}</Box>
+                    <Box display="flex">{userId != null && userId != -1 ? <UserWrapper /> : null}</Box>
                 </UserFormProvider>
             </form>
         </Paper>

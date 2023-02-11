@@ -1,18 +1,17 @@
 import { Visibility, VisibilityOff } from "@mui/icons-material"
 import { FormControl, IconButton, Input, InputAdornment, InputLabel } from "@mui/material"
-import { useState } from "react"
-import { setKey } from "../../slices/persist"
-import { useAppDispatch, useAppSelector } from "../../store/hooks"
+import { setKey } from "../redux/slices/persistState"
+import { setShowPassword } from "../redux/slices/settingsPanelState"
+import { useAppDispatch, useAppSelector } from "../redux/store/hooks"
 
 export const ApiInput = (): JSX.Element => {
-    const [showPassword, setShowPassword] = useState(false)
-
-    const apiKey = useAppSelector((state) => state.persist.apikey)
     const dispatch = useAppDispatch()
+    const apiKey = useAppSelector((state) => state.persist.apikey)
+    const showPassword = useAppSelector((state) => state.settingsPanel.showPassword)
 
     const onBlur = (event: React.FocusEvent<HTMLInputElement>) => {
         dispatch(setKey(event.target.value))
-        setShowPassword(false)
+        dispatch(setShowPassword(false))
     }
 
     return (
@@ -24,7 +23,7 @@ export const ApiInput = (): JSX.Element => {
                 type={showPassword ? "text" : "password"}
                 endAdornment={
                     <InputAdornment position="end">
-                        <IconButton onClick={() => setShowPassword((show) => !show)}>
+                        <IconButton onClick={() => dispatch(setShowPassword(!showPassword))}>
                             {showPassword ? <VisibilityOff /> : <Visibility />}
                         </IconButton>
                     </InputAdornment>

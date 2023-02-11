@@ -12,9 +12,9 @@ import { createRoot } from "react-dom/client"
 import { Provider } from "react-redux"
 import { PersistGate } from "redux-persist/integration/react"
 import { App } from "./App"
+import { persistor, store } from "./components/redux/store/store"
 import "./index.css"
 import "./utils/monkeypatchDuration"
-import { persistor, store } from "./store/store"
 
 export const muiCache = createCache({
     key: "mui",

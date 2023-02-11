@@ -4,10 +4,10 @@ import { useQuery } from "@tanstack/react-query"
 import { isNumber, isString, toNumber } from "lodash-es"
 import { useEffect, useState } from "react"
 import { getUser, getUsers, userKeys } from "../../services/stableHorde"
-import { setUser } from "../../slices/localState"
-import { useAppDispatch } from "../../store/hooks"
 import { GetUser } from "../../types/stableHorde/api"
 import { isLikeGetUser } from "../../utils/isLikeGetUser"
+import { setUser } from "../redux/slices/userPanelState"
+import { useAppDispatch } from "../redux/store/hooks"
 
 export const UserAutocomplete = (): JSX.Element => {
     const dispatch = useAppDispatch()

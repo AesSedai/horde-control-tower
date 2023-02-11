@@ -1,10 +1,10 @@
 import { Grid } from "@mui/material"
-import { useAppSelector } from "../../store/hooks"
+import { useAppSelector } from "../redux/store/hooks"
 import { UserLookup } from "../user/userLookup"
 import { WorkerBox } from "../worker/workerBox"
 
 export const UserPanel = (): JSX.Element => {
-    const userId = useAppSelector((state) => state.localState.selectedUser)
+    const userId = useAppSelector((state) => state.userPanel.selectedUser)
 
     return (
         <Grid container spacing={2}>
