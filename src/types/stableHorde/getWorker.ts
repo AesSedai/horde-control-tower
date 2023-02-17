@@ -1,4 +1,4 @@
-export interface GetWorker {
+export interface GetWorkerResponse {
     name: string
     id: string
     online: boolean

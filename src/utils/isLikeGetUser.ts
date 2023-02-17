@@ -1,5 +1,5 @@
-import { GetUser } from "../types/stableHorde/getUser"
+import { GetUserResponse } from "../types/stableHorde/api"
 
-export const isLikeGetUser = (val: any): val is GetUser => {
+export const isLikeGetUser = (val: any): val is GetUserResponse => {
     return val != null && "username" in val && "id" in val
 }

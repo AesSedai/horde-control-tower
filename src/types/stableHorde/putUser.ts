@@ -1,4 +1,4 @@
-export type PutUser = Partial<{
+export type PutUserRequest = Partial<{
     kudos: number
     concurrency: number
     usage_multiplier: number

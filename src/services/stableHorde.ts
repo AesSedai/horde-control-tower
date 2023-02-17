@@ -1,35 +1,50 @@
 import {
-    GetStatusMode,
-    GetStatusPerformance,
-    GetUser,
-    GetWorker,
-    PostFilters,
-    PostFiltersPayload,
-    PutUser,
-    PutWorker
+    GetGenerateCheckResponse,
+    GetGenerateStatusResponse,
+    GetModelResponse,
+    GetStatusModeResponse,
+    GetStatusPerformanceResponse,
+    GetUserResponse,
+    GetWorkerResponse,
+    PostFiltersRequest,
+    PostFiltersResponse,
+    PostGenerateAsyncRequest,
+    PostGenerateAsyncResponse,
+    PutUserRequest,
+    PutWorkerRequest
 } from "../types/stableHorde/api"
 import { axiosBase, axiosLocal } from "../utils/axios"
 
 // Define a service using a base URL and expected endpoints
-export const getFindUser = (apikey: string): Promise<GetUser> =>
+export const getFindUser = (apikey: string): Promise<GetUserResponse> =>
     axiosBase.get("find_user", { headers: { apikey: apikey } }).then((response) => response.data)
-export const getStatusMode = (): Promise<GetStatusMode> =>
+export const getStatusMode = (): Promise<GetStatusModeResponse> =>
     axiosBase.get("status/modes").then((response) => response.data)
-export const getStatusPerformance = (): Promise<GetStatusPerformance> =>
+export const getStatusPerformance = (): Promise<GetStatusPerformanceResponse> =>
     axiosBase.get("status/performance").then((response) => response.data)
-export const getUsers = (): Promise<GetUser[]> => axiosLocal.get("users.json").then((response) => response.data)
-export const getUser = (id: number): Promise<GetUser> => axiosBase.get(`users/${id}`).then((response) => response.data)
-export const getWorkers = (): Promise<GetWorker[]> => axiosBase.get("workers").then((response) => response.data)
-export const getWorker = (id: string): Promise<GetWorker> =>
+export const getUsers = (): Promise<GetUserResponse[]> => axiosLocal.get("users.json").then((response) => response.data)
+export const getUser = (id: number): Promise<GetUserResponse> =>
+    axiosBase.get(`users/${id}`).then((response) => response.data)
+export const getWorkers = (): Promise<GetWorkerResponse[]> => axiosBase.get("workers").then((response) => response.data)
+export const getWorker = (id: string): Promise<GetWorkerResponse> =>
     axiosBase.get(`workers/${id}`).then((response) => response.data)
+export const getModels = (): Promise<GetModelResponse[]> =>
+    axiosBase.get("status/models").then((response) => response.data)
 
-export const putUser = <T extends PutUser>(id: number, payload: T): Promise<T> =>
+export const putUser = <T extends PutUserRequest>(id: number, payload: T): Promise<T> =>
     axiosBase.put(`users/${id}`, payload).then((response) => response.data)
-export const putWorker = <T extends PutWorker>(id: string, payload: T): Promise<T> =>
+export const putWorker = <T extends PutWorkerRequest>(id: string, payload: T): Promise<T> =>
     axiosBase.put(`workers/${id}`, payload).then((response) => response.data)
 
-export const postFilters = (payload: PostFiltersPayload): Promise<PostFilters> =>
+export const postFilters = (payload: PostFiltersRequest): Promise<PostFiltersResponse> =>
     axiosBase.post("filters", payload).then((response) => response.data)
+
+export const postGenerateAsync = (payload: PostGenerateAsyncRequest): Promise<PostGenerateAsyncResponse> =>
+    axiosBase.post("generate/async", payload).then((response) => response.data)
+export const getGenerateCheck = (id: string): Promise<GetGenerateCheckResponse> =>
+    axiosBase.get(`generate/check/${id}`).then((response) => response.data)
+export const getGenerateStatus = (id: string): Promise<GetGenerateStatusResponse> =>
+    axiosBase.get(`generate/status/${id}`).then((response) => response.data)
 
 export const userKeys = {
     all: ["users"] as const,

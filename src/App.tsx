@@ -5,8 +5,8 @@ import { useEffect } from "react"
 import { BackgroundQueries } from "./components/background"
 import { Layout } from "./components/layout"
 import { Navbar } from "./components/navbar"
+import { ApiInput } from "./components/panels/settings/apiInput"
 import { useAppSelector } from "./components/redux/store/hooks"
-import { ApiInput } from "./components/utilities/apiInput"
 import { getFindUser } from "./services/stableHorde"
 
 export const App = (): JSX.Element => {

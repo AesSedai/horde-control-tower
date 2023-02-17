@@ -2,7 +2,7 @@ import { AppBar, Toolbar, Typography } from "@mui/material"
 
 export const Navbar = (): JSX.Element => {
     return (
-        <AppBar position="static" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+        <AppBar position="sticky" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
             <Toolbar>
                 <Typography
                     variant="h6"

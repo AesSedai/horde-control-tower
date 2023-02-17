@@ -1,4 +1,4 @@
-export interface GetUser {
+export interface GetUserResponse {
     username: string
     id: number
     kudos: number
