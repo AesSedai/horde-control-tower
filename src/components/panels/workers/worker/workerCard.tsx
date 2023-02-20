@@ -268,7 +268,7 @@ export const WorkerCard = (props: Props): JSX.Element => {
                 </Alert>
             </Snackbar>
 
-            <Grid item md={12} lg={6} xl={3} key={worker.id}>
+            <Grid item xs={12} lg={6} xl={3} key={worker.id}>
                 <Card sx={{ backgroundColor: getCardBackground(worker) }}>
                     <CardHeader
                         avatar={

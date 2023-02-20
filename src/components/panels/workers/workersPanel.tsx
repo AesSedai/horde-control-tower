@@ -79,7 +79,7 @@ export const WorkersPanel = (): JSX.Element => {
         <>
             <Box display="flex" justifyContent="space-between" pb={2}>
                 <Box display="flex" alignItems="center">
-                    <Typography variant="h5" sx={{ mr: 2 }}>
+                    <Typography variant="h5" sx={{ mr: { xs: 1, md: 2 } }}>
                         Worker List
                     </Typography>
                     <WorkerFilter />

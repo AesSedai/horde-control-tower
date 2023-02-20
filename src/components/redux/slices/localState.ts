@@ -1,17 +1,22 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 interface LocalStateSliceType {
-    selectedUser?: number
-    workerFilter?: string
+    sidebarOpen: boolean
 }
 
-const initialState: LocalStateSliceType = {}
+const initialState: LocalStateSliceType = {
+    sidebarOpen: false
+}
 
 export const localStateSlice = createSlice({
     name: "localState",
     initialState,
-    reducers: {}
+    reducers: {
+        setSidebarOpen: (state, action: PayloadAction<boolean>) => {
+            state.sidebarOpen = action.payload
+        }
+    }
 })
 
 // Action creators are generated for each case reducer function
-// export const { setUser, setWorkerFilter } = localStateSlice.actions
+export const { setSidebarOpen } = localStateSlice.actions

@@ -102,7 +102,7 @@ export const WorkerModelSelector = (): JSX.Element => {
     })
 
     return (
-        <Box sx={{ width: "50%", maxWidth: "50%" }}>
+        <Box>
             <Box sx={{ display: "flex", alignItems: "center", py: 1 }}>
                 <Typography variant="body1" sx={{ width: width }}>
                     Model

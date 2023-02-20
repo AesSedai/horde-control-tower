@@ -18,7 +18,6 @@ const initialState: ComparatorPanelStateSliceType = {
             sampler_name: "k_euler",
             toggles: [1, 4],
             cfg_scale: 7,
-            denoising_strength: 0.5,
             seed: "",
             height: 512,
             width: 512,
@@ -36,9 +35,6 @@ const initialState: ComparatorPanelStateSliceType = {
         censor_nsfw: false,
         workers: [],
         models: [],
-        source_image: "",
-        source_processing: "",
-        source_mask: "",
         r2: true,
         shared: true
     }
@@ -55,7 +51,9 @@ export const comparatorPanelStateSlice = createSlice({
             state.selectedWorkers = action.payload
         },
         setGenForm: (state, action: PayloadAction<PostGenerateAsyncRequest>) => {
-            state.genForm = action.payload
+            // there's some additional stuff included in payload causing an issue w/ redux
+            // so structuredClone to prevent that from coming too
+            state.genForm = structuredClone(action.payload)
         }
     }
 })

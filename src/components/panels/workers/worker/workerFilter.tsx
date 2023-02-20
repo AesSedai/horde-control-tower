@@ -16,6 +16,7 @@ export const WorkerFilter = (): JSX.Element => {
 
     return (
         <TextField
+            sx={{ mr: 2 }}
             label="Search & Filter"
             variant="outlined"
             value={filter}

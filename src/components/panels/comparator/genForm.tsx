@@ -4,12 +4,15 @@ import {
     Button,
     Checkbox,
     FormControl,
+    Grid,
+    Input,
     MenuItem,
     Select,
     Slider,
     TextField,
     Typography
 } from "@mui/material"
+import { debounce } from "lodash-es"
 import { useEffect } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { PostGenerateAsyncRequest } from "../../../types/stableHorde/api"
@@ -30,8 +33,7 @@ export const GenForm = (): JSX.Element => {
         handleSubmit,
         control,
         formState: { errors },
-        watch,
-        reset
+        watch
     } = useForm<PostGenerateAsyncRequest>({
         defaultValues: genForm
     })
@@ -41,14 +43,16 @@ export const GenForm = (): JSX.Element => {
     }
 
     useEffect(() => {
-        const subscription = watch((value, { name, type }) => {
-            dispatch(setGenForm(JSON.parse(JSON.stringify(value)) as PostGenerateAsyncRequest))
-        })
+        const subscription = watch(
+            debounce((value, { name, type }) => {
+                dispatch(setGenForm(value))
+            }, 300)
+        )
         return () => subscription.unsubscribe()
     }, [watch])
 
     return (
-        <Box sx={{ width: "50%", maxWidth: "50%" }}>
+        <Box>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Box sx={{ display: "flex", alignItems: "center", py: 1 }}>
                     <Typography variant="body1" sx={{ width: width }}>
@@ -101,54 +105,195 @@ export const GenForm = (): JSX.Element => {
                     <Typography variant="body1" sx={{ width: width }}>
                         Steps
                     </Typography>
-
-                    <Controller
-                        name="params.steps"
-                        control={control}
-                        render={({ field }) => (
-                            <Slider valueLabelDisplay="auto" marks step={1} min={1} max={50} {...field} />
-                        )}
-                    />
+                    <Grid container spacing={2} alignItems="center">
+                        <Controller
+                            name="params.steps"
+                            control={control}
+                            render={({ field }) => (
+                                <Grid item xs>
+                                    <Slider valueLabelDisplay="auto" marks step={1} min={1} max={100} {...field} />
+                                </Grid>
+                            )}
+                        />
+                        <Controller
+                            name="params.steps"
+                            control={control}
+                            render={({ field }) => (
+                                <Grid item>
+                                    <Input
+                                        type="number"
+                                        sx={{ width: "60px", ml: 1 }}
+                                        inputProps={{
+                                            step: 1,
+                                            min: 1,
+                                            max: 100,
+                                            type: "number"
+                                        }}
+                                        {...field}
+                                        onChange={(e) => {
+                                            field.onChange(parseInt(e.target.value))
+                                        }}
+                                    />
+                                </Grid>
+                            )}
+                        />
+                    </Grid>
                 </Box>
 
                 <Box sx={{ display: "flex", alignItems: "center", py: 1 }}>
                     <Typography variant="body1" sx={{ width: width }}>
                         Width
                     </Typography>
-
-                    <Controller
-                        name="params.width"
-                        control={control}
-                        render={({ field }) => (
-                            <Slider valueLabelDisplay="auto" marks step={64} min={64} max={1024} {...field} />
-                        )}
-                    />
+                    <Grid container spacing={2} alignItems="center">
+                        <Controller
+                            name="params.width"
+                            control={control}
+                            render={({ field }) => (
+                                <Grid item xs>
+                                    <Slider valueLabelDisplay="auto" marks step={64} min={64} max={1024} {...field} />
+                                </Grid>
+                            )}
+                        />
+                        <Controller
+                            name="params.width"
+                            control={control}
+                            render={({ field }) => (
+                                <Grid item>
+                                    <Input
+                                        type="number"
+                                        sx={{ width: "60px", ml: 1 }}
+                                        inputProps={{
+                                            step: 64,
+                                            min: 64,
+                                            max: 1024,
+                                            type: "number"
+                                        }}
+                                        {...field}
+                                        onChange={(e) => {
+                                            field.onChange(parseInt(e.target.value))
+                                        }}
+                                    />
+                                </Grid>
+                            )}
+                        />
+                    </Grid>
                 </Box>
 
                 <Box sx={{ display: "flex", alignItems: "center", py: 1 }}>
                     <Typography variant="body1" sx={{ width: width }}>
                         Height
                     </Typography>
-                    <Controller
-                        name="params.height"
-                        control={control}
-                        render={({ field }) => (
-                            <Slider valueLabelDisplay="auto" marks step={64} min={64} max={1024} {...field} />
-                        )}
-                    />
+                    <Grid container spacing={2} alignItems="center">
+                        <Controller
+                            name="params.height"
+                            control={control}
+                            render={({ field }) => (
+                                <Grid item xs>
+                                    <Slider valueLabelDisplay="auto" marks step={64} min={64} max={1024} {...field} />
+                                </Grid>
+                            )}
+                        />
+                        <Controller
+                            name="params.height"
+                            control={control}
+                            render={({ field }) => (
+                                <Grid item>
+                                    <Input
+                                        type="number"
+                                        sx={{ width: "60px", ml: 1 }}
+                                        inputProps={{
+                                            step: 64,
+                                            min: 64,
+                                            max: 1024,
+                                            type: "number"
+                                        }}
+                                        {...field}
+                                        onChange={(e) => {
+                                            field.onChange(parseInt(e.target.value))
+                                        }}
+                                    />
+                                </Grid>
+                            )}
+                        />
+                    </Grid>
                 </Box>
 
                 <Box sx={{ display: "flex", alignItems: "center", py: 1 }}>
                     <Typography variant="body1" sx={{ width: width }}>
                         CFG
                     </Typography>
-                    <Controller
-                        name="params.cfg_scale"
-                        control={control}
-                        render={({ field }) => (
-                            <Slider valueLabelDisplay="auto" marks step={1} min={1} max={24} {...field} />
-                        )}
-                    />
+                    <Grid container spacing={2} alignItems="center">
+                        <Controller
+                            name="params.cfg_scale"
+                            control={control}
+                            render={({ field }) => (
+                                <Grid item xs>
+                                    <Slider valueLabelDisplay="auto" marks step={1} min={1} max={24} {...field} />
+                                </Grid>
+                            )}
+                        />
+                        <Controller
+                            name="params.cfg_scale"
+                            control={control}
+                            render={({ field }) => (
+                                <Grid item>
+                                    <Input
+                                        type="number"
+                                        sx={{ width: "60px", ml: 1 }}
+                                        inputProps={{
+                                            step: 1,
+                                            min: 1,
+                                            max: 24,
+                                            type: "number"
+                                        }}
+                                        {...field}
+                                        onChange={(e) => {
+                                            field.onChange(parseInt(e.target.value))
+                                        }}
+                                    />
+                                </Grid>
+                            )}
+                        />
+                    </Grid>
+                </Box>
+
+                <Box sx={{ display: "flex", alignItems: "center", py: 1 }}>
+                    <Typography variant="body1" sx={{ width: width }}>
+                        Clip Skip
+                    </Typography>
+                    <Grid container spacing={2} alignItems="center">
+                        <Controller
+                            name="params.clip_skip"
+                            control={control}
+                            render={({ field }) => (
+                                <Grid item xs>
+                                    <Slider valueLabelDisplay="auto" marks step={1} min={1} max={12} {...field} />
+                                </Grid>
+                            )}
+                        />
+                        <Controller
+                            name="params.clip_skip"
+                            control={control}
+                            render={({ field }) => (
+                                <Grid item>
+                                    <Input
+                                        type="number"
+                                        sx={{ width: "60px", ml: 1 }}
+                                        inputProps={{
+                                            step: 1,
+                                            min: 1,
+                                            max: 12,
+                                            type: "number"
+                                        }}
+                                        {...field}
+                                        onChange={(e) => {
+                                            field.onChange(parseInt(e.target.value))
+                                        }}
+                                    />
+                                </Grid>
+                            )}
+                        />
+                    </Grid>
                 </Box>
 
                 <Box sx={{ display: "flex", alignItems: "center", py: 1 }}>
@@ -181,6 +326,17 @@ export const GenForm = (): JSX.Element => {
 
                 <Box sx={{ display: "flex", alignItems: "center", py: 1 }}>
                     <Typography variant="body1" sx={{ width: width }}>
+                        High Res Fix
+                    </Typography>
+                    <Controller
+                        name="params.hires_fix"
+                        control={control}
+                        render={({ field }) => <Checkbox {...field} checked={field.value} />}
+                    />
+                </Box>
+
+                <Box sx={{ display: "flex", alignItems: "center", py: 1 }}>
+                    <Typography variant="body1" sx={{ width: width }}>
                         Karras
                     </Typography>
                     <Controller
@@ -202,7 +358,7 @@ export const GenForm = (): JSX.Element => {
                 </Box>
 
                 <Button variant="contained" type="submit">
-                    Submit
+                    Generate
                 </Button>
             </form>
         </Box>

@@ -4,7 +4,7 @@ export type PostGenerateAsyncRequest = {
         sampler_name: string
         toggles: number[]
         cfg_scale: number
-        denoising_strength: number
+        denoising_strength?: number
         seed: string
         height: number
         width: number
@@ -22,9 +22,9 @@ export type PostGenerateAsyncRequest = {
     censor_nsfw: boolean
     workers: string[]
     models: string[]
-    source_image: string
-    source_processing: string
-    source_mask: string
+    source_image?: string
+    source_processing?: string
+    source_mask?: string
     r2: boolean
     shared: boolean
 }
