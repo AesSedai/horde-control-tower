@@ -30,6 +30,10 @@ export type PostGenerateAsyncRequest = {
 }
 
 export interface PostGenerateAsyncResponse {
-    id?: string
+    id: string
+    message: string
+}
+
+export interface PostGenerateAsyncResponseErr {
     message: string
 }

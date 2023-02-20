@@ -5,6 +5,7 @@ import { useEffect } from "react"
 import { BackgroundQueries } from "./components/background"
 import { Layout } from "./components/layout"
 import { Navbar } from "./components/navbar"
+import { GenerateQueue } from "./components/panels/comparator/generate/generateQueue"
 import { ApiInput } from "./components/panels/settings/apiInput"
 import { useAppSelector } from "./components/redux/store/hooks"
 import { getFindUser } from "./services/stableHorde"
@@ -58,6 +59,7 @@ export const App = (): JSX.Element => {
 
     return (
         <Box sx={{ display: "flex", flexDirection: "column" }}>
+            <GenerateQueue />
             <BackgroundQueries />
             <Navbar />
             <Layout />

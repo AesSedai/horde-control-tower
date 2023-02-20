@@ -12,13 +12,17 @@ import {
     TextField,
     Typography
 } from "@mui/material"
+import { useMutation } from "@tanstack/react-query"
 import { debounce } from "lodash-es"
 import { useEffect } from "react"
 import { Controller, useForm } from "react-hook-form"
-import { PostGenerateAsyncRequest } from "../../../types/stableHorde/api"
+import { postGenerateAsync } from "../../../services/stableHorde"
+import { PostGenerateAsyncRequest, PostGenerateAsyncResponse } from "../../../types/stableHorde/api"
+import { PostGenerateAsyncResponseErr } from "../../../types/stableHorde/postGenerateAsync"
 import { postProcessors } from "../../../utils/postProcessing"
 import { samplers } from "../../../utils/samplers"
 import { setGenForm } from "../../redux/slices/comparatorPanelState"
+import { addImageGen, resetImageGens } from "../../redux/slices/persistState"
 import { useAppDispatch, useAppSelector } from "../../redux/store/hooks"
 
 const width = "175px"
@@ -29,6 +33,26 @@ export const GenForm = (): JSX.Element => {
     const selectedModel = useAppSelector((state) => state.comparatorPanel.selectedModel)
     const genForm = useAppSelector((state) => state.comparatorPanel.genForm)
 
+    const { mutate } = useMutation<
+        PostGenerateAsyncResponse,
+        PostGenerateAsyncResponseErr,
+        PostGenerateAsyncRequest,
+        any
+    >({
+        mutationFn: postGenerateAsync,
+        onSuccess: (data, variables, context) => {
+            dispatch(
+                addImageGen({
+                    id: data.id,
+                    payload: variables,
+                    state: "check",
+                    check: null,
+                    status: null
+                })
+            )
+        }
+    })
+
     const {
         handleSubmit,
         control,
@@ -38,8 +62,19 @@ export const GenForm = (): JSX.Element => {
         defaultValues: genForm
     })
 
-    const onSubmit = (data: any) => {
-        console.log(data)
+    const onSubmit = (data: PostGenerateAsyncRequest) => {
+        if (selectedModel != null && selectedWorkers.length > 0) {
+            dispatch(resetImageGens())
+
+            selectedWorkers.forEach((worker) => {
+                const params = {
+                    ...data,
+                    workers: [worker.id],
+                    models: [selectedModel.name]
+                }
+                mutate(params)
+            })
+        }
     }
 
     useEffect(() => {
@@ -359,6 +394,14 @@ export const GenForm = (): JSX.Element => {
 
                 <Button variant="contained" type="submit">
                     Generate
+                </Button>
+                <Button
+                    sx={{ ml: 2 }}
+                    variant="contained"
+                    onClick={() => {
+                        dispatch(resetImageGens())
+                    }}>
+                    Clear Output
                 </Button>
             </form>
         </Box>

@@ -1,4 +1,5 @@
 import { Grid, Paper, Typography } from "@mui/material"
+import { GenerateOutput } from "./generateOutput"
 import { GenForm } from "./genForm"
 import { WorkerModelSelector } from "./workerModelSelector"
 
@@ -20,6 +21,7 @@ export const ComparatorPanel = (): JSX.Element => {
                     <Typography align="center" variant="h4" sx={{ pb: 1 }}>
                         Output
                     </Typography>
+                    <GenerateOutput />
                 </Paper>
             </Grid>
         </Grid>
