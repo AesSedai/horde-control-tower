@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { GetWorker } from "../../../types/stableHorde/api"
+import { GetWorkerResponse } from "../../../types/stableHorde/api"
 
 interface WorkerPanelStateSliceType {
-    sortKey: keyof GetWorker
+    sortKey: keyof GetWorkerResponse
     order: "asc" | "desc"
     workerFilter?: string
 }
@@ -19,7 +19,7 @@ export const workerPanelStateSlice = createSlice({
         setWorkerFilter: (state, action: PayloadAction<string>) => {
             state.workerFilter = action.payload
         },
-        setSortKey: (state, action: PayloadAction<keyof GetWorker>) => {
+        setSortKey: (state, action: PayloadAction<keyof GetWorkerResponse>) => {
             state.sortKey = action.payload
         },
         setOrder: (state, action: PayloadAction<"asc" | "desc">) => {

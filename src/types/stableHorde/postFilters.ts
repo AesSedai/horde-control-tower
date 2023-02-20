@@ -1,9 +1,9 @@
-export interface PostFiltersPayload {
-    prompt: string,
+export interface PostFiltersRequest {
+    prompt: string
     filter_type: number
 }
 
-export interface PostFilters {
+export interface PostFiltersResponse {
     suspicion: number
     matches: string[]
 }

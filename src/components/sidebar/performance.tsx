@@ -10,7 +10,6 @@ export const Performance = (): JSX.Element => {
     }
 
     if (data == null || error) {
-        console.log("Performance error", error)
         return <Typography variant="h6">Error loading Horde status</Typography>
     }
 

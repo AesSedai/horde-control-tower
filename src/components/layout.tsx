@@ -1,9 +1,10 @@
 import { TabContext, TabList, TabPanel } from "@mui/lab"
 import { Box, Tab } from "@mui/material"
-import { SettingsPanel } from "./panels/settingsPanel"
-import { UserPanel } from "./panels/userPanel"
-import { UtilitiesPanel } from "./panels/utilitiesPanel"
-import { WorkersPanel } from "./panels/workersPanel"
+import { ComparatorPanel } from "./panels/comparator/comparatorPanel"
+import { SettingsPanel } from "./panels/settings/settingsPanel"
+import { UserPanel } from "./panels/user/userPanel"
+import { UtilitiesPanel } from "./panels/utilities/utilitiesPanel"
+import { WorkersPanel } from "./panels/workers/workersPanel"
 import { setSelectedTab } from "./redux/slices/persistState"
 import { setShowPassword } from "./redux/slices/settingsPanelState"
 import { useAppDispatch, useAppSelector } from "./redux/store/hooks"
@@ -29,8 +30,9 @@ export const Layout = (): JSX.Element => {
                         <TabList onChange={handleChange} aria-label="lab API tabs example">
                             <Tab label="User Lookup" value="1" />
                             <Tab label="Workers" value="2" />
-                            <Tab label="Utilities" value="3" />
-                            <Tab label="Settings" value="4" />
+                            <Tab label="Comparator" value="3" />
+                            <Tab label="Utilities" value="4" />
+                            <Tab label="Settings" value="5" />
                         </TabList>
                     </Box>
                     <TabPanel value={"1"}>
@@ -40,9 +42,12 @@ export const Layout = (): JSX.Element => {
                         <WorkersPanel />
                     </TabPanel>
                     <TabPanel value={"3"}>
-                        <UtilitiesPanel />
+                        <ComparatorPanel />
                     </TabPanel>
                     <TabPanel value={"4"}>
+                        <UtilitiesPanel />
+                    </TabPanel>
+                    <TabPanel value={"5"}>
                         <SettingsPanel />
                     </TabPanel>
                 </TabContext>

@@ -1,18 +1,27 @@
-import { GetStatusMode } from "./getStatusMode"
-import { GetStatusPerformance } from "./getStatusPerformance"
-import { GetUser } from "./getUser"
-import { GetWorker } from "./getWorker"
-import { PostFilters, PostFiltersPayload } from "./postFilters"
-import { PutUser } from "./putUser"
-import { PutWorker } from "./putWorker"
+import { GetGenerateCheckResponse } from "./getGenerateCheck"
+import { GetGenerateStatusResponse } from "./getGenerateStatus"
+import { GetModelResponse } from "./getModel"
+import { GetStatusModeResponse } from "./getStatusMode"
+import { GetStatusPerformanceResponse } from "./getStatusPerformance"
+import { GetUserResponse } from "./getUser"
+import { GetWorkerResponse } from "./getWorker"
+import { PostFiltersRequest, PostFiltersResponse } from "./postFilters"
+import { PostGenerateAsyncRequest, PostGenerateAsyncResponse } from "./postGenerateAsync"
+import { PutUserRequest } from "./putUser"
+import { PutWorkerRequest } from "./putWorker"
 
 export type {
-    GetStatusMode,
-    GetStatusPerformance,
-    GetUser,
-    GetWorker,
-    PostFilters,
-    PutUser,
-    PutWorker,
-    PostFiltersPayload
+    GetModelResponse,
+    GetGenerateCheckResponse,
+    GetGenerateStatusResponse,
+    PostGenerateAsyncRequest,
+    PostGenerateAsyncResponse,
+    GetStatusModeResponse,
+    GetStatusPerformanceResponse,
+    GetUserResponse,
+    GetWorkerResponse,
+    PostFiltersResponse,
+    PutUserRequest,
+    PutWorkerRequest,
+    PostFiltersRequest
 }

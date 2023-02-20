@@ -1,4 +1,4 @@
-export interface GetStatusPerformance {
+export interface GetStatusPerformanceResponse {
     queued_requests: number
     worker_count: number
     queued_megapixelsteps: number

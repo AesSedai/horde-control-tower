@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit"
 import { setupListeners } from "@reduxjs/toolkit/query"
 import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from "redux-persist"
 import storage from "redux-persist/lib/storage"
+import { comparatorPanelStateSlice } from "../slices/comparatorPanelState"
 import { localStateSlice } from "../slices/localState"
 import { persistStateSlice } from "../slices/persistState"
 import { settingsPanelStateSlice } from "../slices/settingsPanelState"
@@ -10,7 +11,7 @@ import { utilityPanelStateSlice } from "../slices/utilityPanelState"
 import { workerPanelStateSlice } from "../slices/workerPanelState"
 import { persistTransform } from "../transforms/persistTransform"
 
-// only persist the API key
+// only persist the items in the persistStateSlice
 const persistConfig = {
     key: "root",
     storage,
@@ -24,7 +25,8 @@ const reducers = combineReducers({
     [settingsPanelStateSlice.name]: settingsPanelStateSlice.reducer,
     [userPanelStateSlice.name]: userPanelStateSlice.reducer,
     [utilityPanelStateSlice.name]: utilityPanelStateSlice.reducer,
-    [workerPanelStateSlice.name]: workerPanelStateSlice.reducer
+    [workerPanelStateSlice.name]: workerPanelStateSlice.reducer,
+    [comparatorPanelStateSlice.name]: comparatorPanelStateSlice.reducer
 })
 
 export type RootReducer = ReturnType<typeof reducers>
@@ -46,7 +48,5 @@ export const persistor = persistStore(store)
 
 setupListeners(store.dispatch)
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>
-// Inferred type: {counter: CounterState}
 export type AppDispatch = typeof store.dispatch

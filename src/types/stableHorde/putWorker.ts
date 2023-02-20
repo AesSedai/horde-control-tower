@@ -1,4 +1,4 @@
-export type PutWorker = Partial<{
+export type PutWorkerRequest = Partial<{
     maintenance: boolean
     maintenance_msg: string
     paused: boolean
