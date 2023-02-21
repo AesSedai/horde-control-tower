@@ -1,3 +1,4 @@
+import { DeleteGenerateStatusResponse, DeleteGenerateStatusResponseErr } from "./deleteGenerateStatus"
 import { GetGenerateCheckResponse } from "./getGenerateCheck"
 import { GetGenerateStatusResponse } from "./getGenerateStatus"
 import { GetModelResponse } from "./getModel"
@@ -11,6 +12,8 @@ import { PutUserRequest } from "./putUser"
 import { PutWorkerRequest } from "./putWorker"
 
 export type {
+    DeleteGenerateStatusResponse,
+    DeleteGenerateStatusResponseErr,
     GetModelResponse,
     GetGenerateCheckResponse,
     GetGenerateStatusResponse,

@@ -8,7 +8,7 @@ import {
 export interface ImageGen {
     id: string
     payload: PostGenerateAsyncRequest
-    state: "pending" | "check" | "status" | "complete" | "error"
+    state: "pending" | "check" | "status" | "complete" | "error" | "delete"
     check: GetGenerateCheckResponse | null
     status: GetGenerateStatusResponse | null
 }

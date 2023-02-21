@@ -1,10 +1,12 @@
+import CasinoIcon from "@mui/icons-material/Casino"
+import { LoadingButton } from "@mui/lab"
 import {
     Autocomplete,
     Box,
     Button,
     Checkbox,
-    FormControl,
     Grid,
+    IconButton,
     Input,
     MenuItem,
     Select,
@@ -13,7 +15,7 @@ import {
     Typography
 } from "@mui/material"
 import { useMutation } from "@tanstack/react-query"
-import { debounce } from "lodash-es"
+import { debounce, random } from "lodash-es"
 import { useEffect } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { postGenerateAsync } from "../../../services/stableHorde"
@@ -22,7 +24,7 @@ import { PostGenerateAsyncResponseErr } from "../../../types/stableHorde/postGen
 import { postProcessors } from "../../../utils/postProcessing"
 import { samplers } from "../../../utils/samplers"
 import { setGenForm } from "../../redux/slices/comparatorPanelState"
-import { addImageGen, resetImageGens } from "../../redux/slices/persistState"
+import { addImageGen, resetImageGens, updateImageGen } from "../../redux/slices/persistState"
 import { useAppDispatch, useAppSelector } from "../../redux/store/hooks"
 
 const width = "175px"
@@ -32,6 +34,11 @@ export const GenForm = (): JSX.Element => {
     const selectedWorkers = useAppSelector((state) => state.comparatorPanel.selectedWorkers)
     const selectedModel = useAppSelector((state) => state.comparatorPanel.selectedModel)
     const genForm = useAppSelector((state) => state.comparatorPanel.genForm)
+    const imaegGens = useAppSelector((state) => state.persist.imageGens)
+    const hasOutput = useAppSelector((state) => state.persist.imageGens.length > 0)
+    const isGenerating = useAppSelector((state) =>
+        state.persist.imageGens.some((gen) => ["pending", "check"].includes(gen.state))
+    )
 
     const { mutate } = useMutation<
         PostGenerateAsyncResponse,
@@ -57,7 +64,8 @@ export const GenForm = (): JSX.Element => {
         handleSubmit,
         control,
         formState: { errors },
-        watch
+        watch,
+        setValue
     } = useForm<PostGenerateAsyncRequest>({
         defaultValues: genForm
     })
@@ -94,13 +102,23 @@ export const GenForm = (): JSX.Element => {
                         Prompt
                     </Typography>
 
-                    <Controller
-                        name="prompt"
-                        control={control}
-                        render={({ field }) => (
-                            <TextField fullWidth required multiline placeholder="Enter prompt here" {...field} />
-                        )}
-                    />
+                    <Grid container spacing={2} alignItems="center">
+                        <Controller
+                            name="prompt"
+                            control={control}
+                            render={({ field }) => (
+                                <Grid item xs>
+                                    <TextField
+                                        fullWidth
+                                        required
+                                        multiline
+                                        placeholder="Enter prompt here"
+                                        {...field}
+                                    />
+                                </Grid>
+                            )}
+                        />
+                    </Grid>
                 </Box>
 
                 <Box sx={{ display: "flex", alignItems: "center", py: 1 }}>
@@ -108,32 +126,50 @@ export const GenForm = (): JSX.Element => {
                         Seed
                     </Typography>
 
-                    <Controller
-                        name="params.seed"
-                        control={control}
-                        render={({ field }) => <TextField fullWidth placeholder="Seed" {...field} />}
-                    />
+                    <Grid container spacing={2} alignItems="center">
+                        <Controller
+                            name="params.seed"
+                            control={control}
+                            render={({ field }) => (
+                                <Grid item xs>
+                                    <TextField fullWidth placeholder="Seed" {...field} />
+                                </Grid>
+                            )}
+                        />
+
+                        <Grid item>
+                            <IconButton
+                                aria-label="randomize seed"
+                                onClick={() => {
+                                    setValue("params.seed", random(100000000, 999999999).toString())
+                                }}>
+                                <CasinoIcon />
+                            </IconButton>
+                        </Grid>
+                    </Grid>
                 </Box>
 
                 <Box sx={{ display: "flex", alignItems: "center", py: 1 }}>
                     <Typography variant="body1" sx={{ width: width }}>
                         Sampler
                     </Typography>
-                    <FormControl fullWidth>
+                    <Grid container spacing={2} alignItems="center">
                         <Controller
                             name="params.sampler_name"
                             control={control}
                             render={({ field }) => (
-                                <Select {...field}>
-                                    {samplers.map((sampler) => (
-                                        <MenuItem key={sampler} value={sampler}>
-                                            {sampler}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
+                                <Grid item xs>
+                                    <Select {...field} fullWidth>
+                                        {samplers.map((sampler) => (
+                                            <MenuItem key={sampler} value={sampler}>
+                                                {sampler}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </Grid>
                             )}
                         />
-                    </FormControl>
+                    </Grid>
                 </Box>
 
                 <Box sx={{ display: "flex", alignItems: "center", py: 1 }}>
@@ -335,74 +371,116 @@ export const GenForm = (): JSX.Element => {
                     <Typography variant="body1" sx={{ width: width }}>
                         Post-Processors
                     </Typography>
-                    <Controller
-                        name="params.post_processing"
-                        control={control}
-                        render={({ field: { onChange, onBlur, value, name, ref } }) => (
-                            <Autocomplete
-                                fullWidth
-                                multiple
-                                onBlur={onBlur}
-                                ref={ref}
-                                value={value}
-                                onChange={(e, v) => {
-                                    onChange(v)
-                                }}
-                                options={postProcessors}
-                                getOptionLabel={(option) => option}
-                                renderInput={(params) => (
-                                    // @ts-expect-error blah
-                                    <TextField {...params} />
-                                )}
-                            />
-                        )}
-                    />
+                    <Grid container spacing={2} alignItems="center">
+                        <Controller
+                            name="params.post_processing"
+                            control={control}
+                            render={({ field: { onChange, onBlur, value, name, ref } }) => (
+                                <Grid item xs>
+                                    <Autocomplete
+                                        fullWidth
+                                        multiple
+                                        onBlur={onBlur}
+                                        ref={ref}
+                                        value={value}
+                                        onChange={(e, v) => {
+                                            onChange(v)
+                                        }}
+                                        options={postProcessors}
+                                        getOptionLabel={(option) => option}
+                                        renderInput={(params) => (
+                                            // @ts-expect-error blah
+                                            <TextField {...params} />
+                                        )}
+                                    />
+                                </Grid>
+                            )}
+                        />
+                    </Grid>
                 </Box>
 
                 <Box sx={{ display: "flex", alignItems: "center", py: 1 }}>
                     <Typography variant="body1" sx={{ width: width }}>
                         High Res Fix
                     </Typography>
-                    <Controller
-                        name="params.hires_fix"
-                        control={control}
-                        render={({ field }) => <Checkbox {...field} checked={field.value} />}
-                    />
+                    <Grid container spacing={2} alignItems="center">
+                        <Controller
+                            name="params.hires_fix"
+                            control={control}
+                            render={({ field }) => (
+                                <Grid item xs>
+                                    <Checkbox {...field} checked={field.value} />
+                                </Grid>
+                            )}
+                        />
+                    </Grid>
                 </Box>
 
                 <Box sx={{ display: "flex", alignItems: "center", py: 1 }}>
                     <Typography variant="body1" sx={{ width: width }}>
                         Karras
                     </Typography>
-                    <Controller
-                        name="params.karras"
-                        control={control}
-                        render={({ field }) => <Checkbox {...field} checked={field.value} />}
-                    />
+                    <Grid container spacing={2} alignItems="center">
+                        <Controller
+                            name="params.karras"
+                            control={control}
+                            render={({ field }) => (
+                                <Grid item xs>
+                                    <Checkbox {...field} checked={field.value} />
+                                </Grid>
+                            )}
+                        />
+                    </Grid>
                 </Box>
 
                 <Box sx={{ display: "flex", alignItems: "center", py: 1 }}>
                     <Typography variant="body1" sx={{ width: width }}>
                         Tiling
                     </Typography>
-                    <Controller
-                        name="params.tiling"
-                        control={control}
-                        render={({ field }) => <Checkbox {...field} checked={field.value} />}
-                    />
+                    <Grid container spacing={2} alignItems="center">
+                        <Controller
+                            name="params.tiling"
+                            control={control}
+                            render={({ field }) => (
+                                <Grid item xs>
+                                    <Checkbox {...field} checked={field.value} />
+                                </Grid>
+                            )}
+                        />
+                    </Grid>
                 </Box>
 
-                <Button variant="contained" type="submit">
-                    Generate
-                </Button>
-                <Button
-                    sx={{ ml: 2 }}
-                    variant="contained"
-                    onClick={() => {
-                        dispatch(resetImageGens())
-                    }}>
-                    Clear Output
-                </Button>
+                <LoadingButton type="submit" loading={isGenerating} variant="contained">
+                    Submit
+                </LoadingButton>
+                {isGenerating ? (
+                    <Button
+                        sx={{ ml: 2 }}
+                        color="error"
+                        variant="contained"
+                        onClick={() => {
+                            imaegGens.forEach((gen) => {
+                                dispatch(
+                                    updateImageGen({
+                                        ...gen,
+                                        state: "delete"
+                                    })
+                                )
+                            })
+                        }}>
+                        Cancel
+                    </Button>
+                ) : null}
+                {hasOutput ? (
+                    <Button
+                        sx={{ ml: 2 }}
+                        variant="contained"
+                        onClick={() => {
+                            dispatch(resetImageGens())
+                        }}>
+                        Clear Output
+                    </Button>
+                ) : null}
             </form>
         </Box>
     )

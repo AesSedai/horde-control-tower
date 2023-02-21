@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { getGenerateCheck, getGenerateStatus } from "../../../../services/stableHorde"
+import { deleteGenerateStatus, getGenerateCheck, getGenerateStatus } from "../../../../services/stableHorde"
 import { urlToBase64 } from "../../../../utils/urlToBase64"
 import { ImageGen, updateImageGen } from "../../../redux/slices/persistState"
 import { useAppDispatch } from "../../../redux/store/hooks"
@@ -14,7 +14,7 @@ export const GenerateRequest = (props: GenerateRequestProps): JSX.Element => {
     const dispatch = useAppDispatch()
 
     const check = useQuery(["check", gen.id], () => getGenerateCheck(gen.id), {
-        refetchInterval: 5000,
+        refetchInterval: 2000,
         enabled: gen.state === "check",
         onSuccess: (data) => {
             if (gen.state === "check") {
@@ -36,7 +36,7 @@ export const GenerateRequest = (props: GenerateRequestProps): JSX.Element => {
     })
 
     const status = useQuery(["status", gen.id], () => getGenerateStatus(gen.id), {
-        refetchInterval: 5000,
+        refetchInterval: false,
         enabled: gen.state === "status",
         onSuccess: async (data) => {
             if (gen.state === "status") {
@@ -56,6 +56,21 @@ export const GenerateRequest = (props: GenerateRequestProps): JSX.Element => {
                     })
                 )
             }
+        }
+    })
+
+    const del = useQuery(["delete", gen.id], () => deleteGenerateStatus(gen.id), {
+        refetchInterval: false,
+        retry: false,
+        enabled: gen.state === "delete",
+        onSuccess: async (data) => {
+            dispatch(
+                updateImageGen({
+                    ...gen,
+                    state: "complete",
+                    status: data
+                })
+            )
         }
     })
 

@@ -1,4 +1,5 @@
 import {
+    DeleteGenerateStatusResponse,
     GetGenerateCheckResponse,
     GetGenerateStatusResponse,
     GetModelResponse,
@@ -45,6 +46,8 @@ export const getGenerateCheck = (id: string): Promise<GetGenerateCheckResponse> 
     axiosBase.get(`generate/check/${id}`).then((response) => response.data)
 export const getGenerateStatus = (id: string): Promise<GetGenerateStatusResponse> =>
     axiosBase.get(`generate/status/${id}`).then((response) => response.data)
+export const deleteGenerateStatus = (id: string): Promise<DeleteGenerateStatusResponse> =>
+    axiosBase.delete(`generate/status/${id}`).then((response) => response.data)
 
 export const userKeys = {
     all: ["users"] as const,
