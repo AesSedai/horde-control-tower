@@ -459,14 +459,16 @@ export const GenForm = (): JSX.Element => {
                         color="error"
                         variant="contained"
                         onClick={() => {
-                            imaegGens.forEach((gen) => {
-                                dispatch(
-                                    updateImageGen({
-                                        ...gen,
-                                        state: "delete"
-                                    })
-                                )
-                            })
+                            imaegGens
+                                .filter((gen) => ["pending", "check"].includes(gen.state))
+                                .forEach((gen) => {
+                                    dispatch(
+                                        updateImageGen({
+                                            ...gen,
+                                            state: "delete"
+                                        })
+                                    )
+                                })
                         }}>
                         Cancel
                     </Button>
