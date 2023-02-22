@@ -16,14 +16,14 @@ export interface ImageGen {
 export interface PersistStateSliceType {
     apikey: string
     selectedTab: string
-    favorites: number[]
+    genFavorites: { name: string; form: PostGenerateAsyncRequest }[]
     imageGens: ImageGen[]
 }
 
 export const initialState: PersistStateSliceType = {
     apikey: "",
     selectedTab: "1",
-    favorites: [],
+    genFavorites: [],
     imageGens: []
 }
 
@@ -52,10 +52,38 @@ export const persistStateSlice = createSlice({
             if (idx != null) {
                 state.imageGens[idx] = action.payload
             }
-
+        },
+        addGenFavorite: (state, action: PayloadAction<{ name: string; form: PostGenerateAsyncRequest }>) => {
+            state.genFavorites.push(action.payload)
+        },
+        updateGenFavorite: (state, action: PayloadAction<{ idx: number; form: PostGenerateAsyncRequest }>) => {
+            state.genFavorites[action.payload.idx] = {
+                name: state.genFavorites[action.payload.idx]!.name,
+                form: action.payload.form
+            }
+        },
+        deleteGenFavorite: (state, action: PayloadAction<number>) => {
+            state.genFavorites.splice(action.payload)
+        },
+        resetExceptApiKey: (state) => {
+            state = {
+                ...initialState,
+                apikey: state.apikey
+            }
+            return state
         }
     }
 })
 
 // Action creators are generated for each case reducer function
-export const { setKey, setSelectedTab, resetImageGens, addImageGen, updateImageGen } = persistStateSlice.actions
+export const {
+    setKey,
+    setSelectedTab,
+    resetImageGens,
+    addImageGen,
+    updateImageGen,
+    addGenFavorite,
+    resetExceptApiKey,
+    updateGenFavorite,
+    deleteGenFavorite
+} = persistStateSlice.actions

@@ -44,6 +44,7 @@ export const GenerateOutput = (): JSX.Element => {
             } else {
                 return (
                     <ImageListItem
+                        key={gen.id}
                         sx={{ paddingTop: genHasImage(gen).length > 0 ? "0%" : "100%", border: "1px solid black" }}>
                         <img src={genHasImage(gen)} />
                         <ImageListItemBar title={workers == null ? "" : workers[gen.payload.workers[0] ?? ""]} />

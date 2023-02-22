@@ -23,7 +23,7 @@ import { PostGenerateAsyncRequest, PostGenerateAsyncResponse } from "../../../ty
 import { PostGenerateAsyncResponseErr } from "../../../types/stableHorde/postGenerateAsync"
 import { postProcessors } from "../../../utils/postProcessing"
 import { samplers } from "../../../utils/samplers"
-import { setGenForm } from "../../redux/slices/comparatorPanelState"
+import { setGenForm, setReload } from "../../redux/slices/comparatorPanelState"
 import { addImageGen, resetImageGens, updateImageGen } from "../../redux/slices/persistState"
 import { useAppDispatch, useAppSelector } from "../../redux/store/hooks"
 
@@ -36,6 +36,7 @@ export const GenForm = (): JSX.Element => {
     const genForm = useAppSelector((state) => state.comparatorPanel.genForm)
     const imaegGens = useAppSelector((state) => state.persist.imageGens)
     const hasOutput = useAppSelector((state) => state.persist.imageGens.length > 0)
+    const watchReload = useAppSelector((state) => state.comparatorPanel.reload)
     const isGenerating = useAppSelector((state) =>
         state.persist.imageGens.some((gen) => ["pending", "check"].includes(gen.state))
     )
@@ -65,7 +66,8 @@ export const GenForm = (): JSX.Element => {
         control,
         formState: { errors },
         watch,
-        setValue
+        setValue,
+        reset
     } = useForm<PostGenerateAsyncRequest>({
         defaultValues: genForm
     })
@@ -93,6 +95,13 @@ export const GenForm = (): JSX.Element => {
         )
         return () => subscription.unsubscribe()
     }, [watch])
+
+    useEffect(() => {
+        if (watchReload) {
+            dispatch(setReload(false))
+            reset(genForm)
+        }
+    }, [watchReload])
 
     return (
         <Box>

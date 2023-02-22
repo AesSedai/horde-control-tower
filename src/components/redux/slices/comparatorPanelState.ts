@@ -4,12 +4,14 @@ import { GetModelResponse } from "../../../types/stableHorde/getModel"
 import { GetWorkerResponse } from "../../../types/stableHorde/getWorker"
 
 interface ComparatorPanelStateSliceType {
+    reload: boolean
     selectedModel: GetModelResponse | null
     selectedWorkers: GetWorkerResponse[]
     genForm: PostGenerateAsyncRequest
 }
 
 const initialState: ComparatorPanelStateSliceType = {
+    reload: false,
     selectedModel: null,
     selectedWorkers: [],
     genForm: {
@@ -54,9 +56,12 @@ export const comparatorPanelStateSlice = createSlice({
             // there's some additional stuff included in payload causing an issue w/ redux
             // so structuredClone to prevent that from coming too
             state.genForm = structuredClone(action.payload)
+        },
+        setReload: (state, action: PayloadAction<boolean>) => {
+            state.reload = action.payload
         }
     }
 })
 
 // Action creators are generated for each case reducer function
-export const { setSelectedModel, setSelectedWorkers, setGenForm } = comparatorPanelStateSlice.actions
+export const { setSelectedModel, setSelectedWorkers, setGenForm, setReload } = comparatorPanelStateSlice.actions
