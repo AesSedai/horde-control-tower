@@ -79,7 +79,7 @@ export const WorkerModelSelector = (): JSX.Element => {
         if (selectedModel != null && selectedWorkers.length > 0) {
             const selectedIds = selectedWorkers.map((worker) => worker.id)
             const checkNewFiltered = selectedWorkers.filter((worker) => {
-                return worker.models.includes(selectedModel.name)
+                return worker?.models?.includes(selectedModel.name)
             })
             const checkNewFilteredIds = checkNewFiltered.map((worker) => worker.id)
             if (!isEqual(selectedIds, checkNewFilteredIds)) {
@@ -98,7 +98,7 @@ export const WorkerModelSelector = (): JSX.Element => {
         if (selectedModel == null) {
             return true
         }
-        return worker.models.includes(selectedModel.name)
+        return worker?.models?.includes(selectedModel.name)
     })
 
     return (

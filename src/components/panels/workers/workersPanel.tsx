@@ -35,6 +35,10 @@ export const WorkersPanel = (): JSX.Element => {
             return orderBy(
                 data
                     .filter((worker) => {
+                        // filter out text2text for now
+                        if (worker.performance.includes("per form") || worker.performance.includes("tokens")) {
+                            return false
+                        }
                         if (filter == null) {
                             return true
                         } else {

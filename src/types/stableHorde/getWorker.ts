@@ -20,7 +20,7 @@ export interface GetWorkerResponse {
     flagged: boolean
     suspicious: number
     uncompleted_jobs: number
-    models: string[]
+    models?: string[]
     team: {
         name: string
         id: string

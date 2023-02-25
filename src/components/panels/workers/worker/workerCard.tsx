@@ -33,6 +33,7 @@ import { useState } from "react"
 import { putWorker, workerKeys } from "../../../../services/stableHorde"
 import { GetWorkerResponse, PutWorkerRequest } from "../../../../types/stableHorde/api"
 import { bad, badBackground, good, warnBackground } from "../../../../utils/colors"
+import { isNumeric } from "../../../../utils/isNumeric"
 
 interface Props {
     worker: GetWorkerResponse
@@ -242,12 +243,16 @@ export const WorkerCard = (props: Props): JSX.Element => {
                     <>
                         <DialogTitle>"{worker.name}" Models</DialogTitle>
                         <DialogContent>
-                            <Typography variant="body1">{orderBy(worker.models, [model => model.toLowerCase()]).join(", ")}</Typography>
+                            <Typography variant="body1">
+                                {orderBy(worker?.models ?? [], [(model) => model.toLowerCase()]).join(", ")}
+                            </Typography>
                         </DialogContent>
                     </>
                 )
         }
     }
+
+    console.log("worker", worker)
 
     return (
         <>
@@ -309,7 +314,7 @@ export const WorkerCard = (props: Props): JSX.Element => {
                                 ) : null}
                             </Box>
                         }
-                        title={<Typography variant="h5">{truncate(worker.name, {length: 30})}</Typography>}
+                        title={<Typography variant="h5">{truncate(worker.name, { length: 30 })}</Typography>}
                         subheader={worker.id}
                     />
                     <CardContent>
@@ -318,9 +323,11 @@ export const WorkerCard = (props: Props): JSX.Element => {
                         <Typography variant="body2">
                             Uptime: {Duration.fromObject({ seconds: worker.uptime }).toHuman()}
                         </Typography>
-                        <Typography variant="body2">Models Loaded: {worker.models.length}</Typography>
+                        <Typography variant="body2">Models Loaded: {worker?.models?.length ?? "None"}</Typography>
                         <Typography variant="body2">MPS Generated: {worker.megapixelsteps_generated}</Typography>
-                        <Typography variant="body2">Speed: {worker.performance} MPS</Typography>
+                        <Typography variant="body2">
+                            Speed: {worker.performance} {isNumeric(worker.performance) ? "MPS" : null}
+                        </Typography>
                         <Typography variant="body2">Threads: {worker.threads}</Typography>
                         <Typography variant="body2">Requests Fulfilled: {worker.requests_fulfilled}</Typography>
                         <Typography variant="body2">NSFW: {worker.nsfw ? "true" : "false"}</Typography>
