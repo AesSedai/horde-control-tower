@@ -252,8 +252,6 @@ export const WorkerCard = (props: Props): JSX.Element => {
         }
     }
 
-    console.log("worker", worker)
-
     return (
         <>
             <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
