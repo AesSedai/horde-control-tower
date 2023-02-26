@@ -2,10 +2,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 interface UtilityPanelStateSliceType {
     prompt: string
+    ipAddr: string
 }
 
 const initialState: UtilityPanelStateSliceType = {
-    prompt: ""
+    prompt: "",
+    ipAddr: ""
 }
 
 export const utilityPanelStateSlice = createSlice({
@@ -14,9 +16,12 @@ export const utilityPanelStateSlice = createSlice({
     reducers: {
         setPrompt: (state, action: PayloadAction<string>) => {
             state.prompt = action.payload
+        },
+        setIpAddr: (state, action: PayloadAction<string>) => {
+            state.ipAddr = action.payload
         }
     }
 })
 
 // Action creators are generated for each case reducer function
-export const { setPrompt } = utilityPanelStateSlice.actions
+export const { setPrompt, setIpAddr } = utilityPanelStateSlice.actions

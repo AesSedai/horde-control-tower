@@ -90,11 +90,7 @@ export const WorkerModelSelector = (): JSX.Element => {
         }
     }, [workers, models, selectedWorkers, selectedModel])
 
-    if (workers == null || models == null) {
-        return <></>
-    }
-
-    const filteredWorkers = workers.filter((worker) => {
+    const filteredWorkers = (workers ?? []).filter((worker) => {
         if (selectedModel == null) {
             return true
         }
@@ -111,7 +107,7 @@ export const WorkerModelSelector = (): JSX.Element => {
                 <Autocomplete
                     fullWidth
                     disablePortal
-                    options={models}
+                    options={models ?? []}
                     blurOnSelect
                     value={selectedModel}
                     autoHighlight

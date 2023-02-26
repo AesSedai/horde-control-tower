@@ -1,5 +1,7 @@
 import {
     DeleteGenerateStatusResponse,
+    DeleteIpAddrRequest,
+    DeleteIpAddrResponse,
     GetGenerateCheckResponse,
     GetGenerateStatusResponse,
     GetModelResponse,
@@ -48,6 +50,9 @@ export const getGenerateStatus = (id: string): Promise<GetGenerateStatusResponse
     axiosBase.get(`generate/status/${id}`).then((response) => response.data)
 export const deleteGenerateStatus = (id: string): Promise<DeleteGenerateStatusResponse> =>
     axiosBase.delete(`generate/status/${id}`).then((response) => response.data)
+
+export const deleteIpAddr = (payload: DeleteIpAddrRequest): Promise<DeleteIpAddrResponse> =>
+    axiosBase.delete(`operations/ipaddr`, { data: payload }).then((response) => response.data)
 
 export const userKeys = {
     all: ["users"] as const,
