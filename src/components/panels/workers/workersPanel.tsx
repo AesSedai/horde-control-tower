@@ -36,7 +36,7 @@ export const WorkersPanel = (): JSX.Element => {
                 data
                     .filter((worker) => {
                         // filter out text2text for now
-                        if (worker.performance.includes("per form") || worker.performance.includes("tokens")) {
+                        if (worker.type !== "image") {
                             return false
                         }
                         if (filter == null) {

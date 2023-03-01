@@ -8,8 +8,11 @@ export const axiosBase = axios.create({
 axiosBase.interceptors.request.use(
     function (config) {
         const apiKey = store.getState().persist.apikey
-        if (config.headers != null && apiKey != null) {
-            config.headers["apikey"] = apiKey
+        if (config.headers != null) {
+            if (apiKey != null) {
+                config.headers["apikey"] = apiKey
+            }
+            config.headers["Client-Agent"] = `HordeControlTower/${APP_VERSION}`
         }
         return config
     },

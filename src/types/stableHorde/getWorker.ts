@@ -31,5 +31,6 @@ export interface GetWorkerResponse {
     megapixelsteps_generated: number
     img2img: boolean
     painting: boolean
+    type: "image" | "text" | "interrogation"
     "post-processing": boolean
 }

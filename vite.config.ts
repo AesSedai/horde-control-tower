@@ -13,5 +13,8 @@ export default defineConfig({
         port: 3000,
         host: "localhost"
     },
+    define: {
+        APP_VERSION: JSON.stringify(process.env.npm_package_version)
+    },
     base: "/horde-control-tower/"
 })

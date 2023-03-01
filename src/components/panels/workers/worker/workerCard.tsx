@@ -6,6 +6,7 @@ import FlagIcon from "@mui/icons-material/Flag"
 import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered"
 import PauseIcon from "@mui/icons-material/Pause"
 import PlayArrowIcon from "@mui/icons-material/PlayArrow"
+import SpeedIcon from "@mui/icons-material/Speed"
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser"
 import {
     Alert,
@@ -58,10 +59,12 @@ export const WorkerCard = (props: Props): JSX.Element => {
     const [maintReason, setMaintReason] = useState("")
 
     const getCardBackground = (worker: GetWorkerResponse): string => {
-        if (parseFloat(worker.performance) > 3.0) {
+        if (worker.maintenance_mode || worker.paused || worker.flagged) {
+            return badBackground
+        } else if (parseFloat(worker.performance) > 3.0 || parseFloat(worker.performance) < 0.4) {
             return warnBackground
         }
-        return worker.maintenance_mode || worker.paused || worker.flagged ? badBackground : "background.paper"
+        return "background.paper"
     }
 
     const mutation = useMutation<PutWorkerRequest, unknown, { id: string; data: PutWorkerRequest }, unknown>(
@@ -274,6 +277,11 @@ export const WorkerCard = (props: Props): JSX.Element => {
             <Grid item xs={12} lg={6} xl={3} key={worker.id}>
                 <Card sx={{ backgroundColor: getCardBackground(worker) }}>
                     <CardHeader
+                        sx={{
+                            ".MuiCardHeader-action": {
+                                alignSelf: "center"
+                            }
+                        }}
                         avatar={
                             worker.online && !worker.paused && !worker.maintenance_mode && !worker.flagged ? (
                                 <Tooltip title="Worker Online">
@@ -287,6 +295,18 @@ export const WorkerCard = (props: Props): JSX.Element => {
                         }
                         action={
                             <Box>
+                                {parseFloat(worker.performance) < 0.4 ? (
+                                    <Tooltip title="Worker Low Speed Warning">
+                                        <SpeedIcon sx={{ color: bad, mt: 0.5, mr: 1, transform: "scaleX(-1)" }} />
+                                    </Tooltip>
+                                ) : null}
+
+                                {parseFloat(worker.performance) > 3.0 ? (
+                                    <Tooltip title="Worker High Speed Warning">
+                                        <SpeedIcon sx={{ color: bad, mt: 0.5, mr: 1 }} />
+                                    </Tooltip>
+                                ) : null}
+
                                 {worker.paused ? (
                                     <Tooltip title="Worker Paused">
                                         <DoNotDisturbOnIcon sx={{ color: bad, mt: 0.5, mr: 1 }} />
