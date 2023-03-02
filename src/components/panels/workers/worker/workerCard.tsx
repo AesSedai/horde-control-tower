@@ -338,6 +338,7 @@ export const WorkerCard = (props: Props): JSX.Element => {
                     <CardContent>
                         <Typography variant="body2">Full Name: {worker.name}</Typography>
                         <Typography variant="body2">Owner: {worker.owner}</Typography>
+                        <Typography variant="body2">Bridge Agent: {worker.bridge_agent}</Typography>
                         <Typography variant="body2">
                             Uptime: {Duration.fromObject({ seconds: worker.uptime }).toHuman()}
                         </Typography>

@@ -45,7 +45,8 @@ export const WorkersPanel = (): JSX.Element => {
                             return (
                                 worker.name.toLowerCase().includes(filter) ||
                                 (worker.owner ?? "").toLowerCase().includes(filter) ||
-                                worker.id.toLowerCase().includes(filter)
+                                worker.id.toLowerCase().includes(filter) ||
+                                worker.bridge_agent.toLowerCase().includes(filter)
                             )
                         }
                     })
@@ -98,6 +99,7 @@ export const WorkersPanel = (): JSX.Element => {
                             sx={{ ".MuiSelect-select": { py: 1 } }}>
                             <MenuItem value={"name"}>Name</MenuItem>
                             <MenuItem value={"performance"}>Performance</MenuItem>
+                            <MenuItem value={"bridge_agent"}>Bridge Agent</MenuItem>
                             <MenuItem value={"uptime"}>Uptime</MenuItem>
                             <MenuItem value={"megapixelsteps_generated"}>MPS Generated</MenuItem>
                         </Select>
