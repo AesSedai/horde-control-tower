@@ -8,7 +8,7 @@ import { Navbar } from "./components/navbar"
 import { GenerateQueue } from "./components/panels/comparator/generate/generateQueue"
 import { ApiInput } from "./components/panels/settings/apiInput"
 import { useAppSelector } from "./components/redux/store/hooks"
-import { getFindUser } from "./services/stableHorde"
+import { getFindUser } from "./services/aiHorde"
 
 export const App = (): JSX.Element => {
     const apiKey = useAppSelector((state) => state.persist.apikey)

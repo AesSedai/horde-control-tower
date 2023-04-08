@@ -2,7 +2,7 @@ import { LoadingButton } from "@mui/lab"
 import { Box, Paper, TextField, Typography } from "@mui/material"
 import { useQuery } from "@tanstack/react-query"
 import { isEmpty } from "lodash-es"
-import { postFilters } from "../../../services/stableHorde"
+import { postFilters } from "../../../services/aiHorde"
 import { setPrompt } from "../../redux/slices/utilityPanelState"
 import { useAppDispatch, useAppSelector } from "../../redux/store/hooks"
 

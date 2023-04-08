@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { deleteGenerateStatus, getGenerateCheck, getGenerateStatus } from "../../../../services/stableHorde"
+import { deleteGenerateStatus, getGenerateCheck, getGenerateStatus } from "../../../../services/aiHorde"
 import { urlToBase64 } from "../../../../utils/urlToBase64"
 import { ImageGen, updateImageGen } from "../../../redux/slices/persistState"
 import { useAppDispatch } from "../../../redux/store/hooks"

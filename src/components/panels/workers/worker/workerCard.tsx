@@ -31,10 +31,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { isEmpty, orderBy, truncate } from "lodash-es"
 import { Duration } from "luxon"
 import { useState } from "react"
-import { putWorker, workerKeys } from "../../../../services/stableHorde"
+import { putWorker, workerKeys } from "../../../../services/aiHorde"
 import { GetWorkerResponse, PutWorkerRequest } from "../../../../types/stableHorde/api"
 import { bad, badBackground, good, warnBackground } from "../../../../utils/colors"
-import { isNumeric } from "../../../../utils/isNumeric"
 
 interface Props {
     worker: GetWorkerResponse
@@ -49,6 +48,23 @@ type DialogTypes =
     | "unsetPaused"
     | "listModels"
 
+const isHighSpeed = (worker: GetWorkerResponse): boolean => {
+    if (worker.type === "image" && parseFloat(worker.performance) > 3.0) {
+        return true
+    } else {
+    }
+    return false
+}
+
+const isLowSpeed = (worker: GetWorkerResponse): boolean => {
+    if (worker.type === "image" && parseFloat(worker.performance) < 0.4) {
+        return true
+    } else {
+    }
+
+    return false
+}
+
 export const WorkerCard = (props: Props): JSX.Element => {
     const { worker } = props
 
@@ -61,7 +77,7 @@ export const WorkerCard = (props: Props): JSX.Element => {
     const getCardBackground = (worker: GetWorkerResponse): string => {
         if (worker.maintenance_mode || worker.paused || worker.flagged) {
             return badBackground
-        } else if (parseFloat(worker.performance) > 3.0 || parseFloat(worker.performance) < 0.4) {
+        } else if (isHighSpeed(worker) || isLowSpeed(worker)) {
             return warnBackground
         }
         return "background.paper"
@@ -295,13 +311,13 @@ export const WorkerCard = (props: Props): JSX.Element => {
                         }
                         action={
                             <Box>
-                                {parseFloat(worker.performance) < 0.4 ? (
+                                {isLowSpeed(worker) ? (
                                     <Tooltip title="Worker Low Speed Warning">
                                         <SpeedIcon sx={{ color: bad, mt: 0.5, mr: 1, transform: "scaleX(-1)" }} />
                                     </Tooltip>
                                 ) : null}
 
-                                {parseFloat(worker.performance) > 3.0 ? (
+                                {isHighSpeed(worker) ? (
                                     <Tooltip title="Worker High Speed Warning">
                                         <SpeedIcon sx={{ color: bad, mt: 0.5, mr: 1 }} />
                                     </Tooltip>
@@ -342,11 +358,15 @@ export const WorkerCard = (props: Props): JSX.Element => {
                         <Typography variant="body2">
                             Uptime: {Duration.fromObject({ seconds: worker.uptime }).toHuman()}
                         </Typography>
-                        <Typography variant="body2">Models Loaded: {worker?.models?.length ?? "None"}</Typography>
-                        <Typography variant="body2">MPS Generated: {worker.megapixelsteps_generated}</Typography>
-                        <Typography variant="body2">
-                            Speed: {worker.performance} {isNumeric(worker.performance) ? "MPS" : null}
-                        </Typography>
+                        {/* interrogation worker does not load models */}
+                        {worker.type !== "interrogation" ? (
+                            <Typography variant="body2">Models Loaded: {worker?.models?.length ?? "None"}</Typography>
+                        ) : null}
+                        {/* only image workers track MPS generated */}
+                        {worker.type === "image" ? (
+                            <Typography variant="body2">MPS Generated: {worker.megapixelsteps_generated}</Typography>
+                        ) : null}
+                        <Typography variant="body2">Speed: {worker.performance}</Typography>
                         <Typography variant="body2">Threads: {worker.threads}</Typography>
                         <Typography variant="body2">Requests Fulfilled: {worker.requests_fulfilled}</Typography>
                         <Typography variant="body2">NSFW: {worker.nsfw ? "true" : "false"}</Typography>

@@ -1,7 +1,7 @@
 import CircleIcon from "@mui/icons-material/Circle"
 import { List, ListItem, ListItemIcon, ListItemText, Typography } from "@mui/material"
 import { useQuery } from "@tanstack/react-query"
-import { getStatusMode } from "../../services/stableHorde"
+import { getStatusMode } from "../../services/aiHorde"
 import { bad, good } from "../../utils/colors"
 
 export const HordeStatus = (): JSX.Element => {

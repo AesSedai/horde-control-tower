@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { getModels, getStatusMode, getStatusPerformance, getUsers, userKeys } from "../services/stableHorde"
+import { getModels, getStatusMode, getStatusPerformance, getUsers, userKeys } from "../services/aiHorde"
 
 export const BackgroundQueries = (): JSX.Element => {
     const users = useQuery(userKeys.all, getUsers, {

@@ -13,7 +13,7 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { useUserFormContext } from "../../../../context/userFormContext"
-import { getUser, putUser, userKeys } from "../../../../services/stableHorde"
+import { getUser, putUser, userKeys } from "../../../../services/aiHorde"
 import { PutUserRequest } from "../../../../types/stableHorde/api"
 import { useAppSelector } from "../../../redux/store/hooks"
 

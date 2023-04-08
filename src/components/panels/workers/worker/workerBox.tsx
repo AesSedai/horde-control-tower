@@ -1,6 +1,6 @@
 import { Grid, Typography } from "@mui/material"
 import { useQuery } from "@tanstack/react-query"
-import { getUser, userKeys } from "../../../../services/stableHorde"
+import { getUser, userKeys } from "../../../../services/aiHorde"
 import { WorkerWrapper } from "./workerWrapper"
 
 interface Props {

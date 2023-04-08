@@ -1,7 +1,7 @@
 import { Box, CircularProgress, ImageList, ImageListItem, ImageListItemBar, Typography } from "@mui/material"
 import { useQuery } from "@tanstack/react-query"
 import { fromPairs } from "lodash-es"
-import { getWorkers, workerKeys } from "../../../services/stableHorde"
+import { getWorkers, workerKeys } from "../../../services/aiHorde"
 import { ImageGen } from "../../redux/slices/persistState"
 import { useAppSelector } from "../../redux/store/hooks"
 

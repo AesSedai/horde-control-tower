@@ -1,6 +1,6 @@
 import { List, ListItem, ListItemText, Typography } from "@mui/material"
 import { useQuery } from "@tanstack/react-query"
-import { getStatusPerformance } from "../../services/stableHorde"
+import { getStatusPerformance } from "../../services/aiHorde"
 
 export const Performance = (): JSX.Element => {
     const { data, isLoading, error } = useQuery(["performance"], getStatusPerformance)

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { getWorker, workerKeys } from "../../../../services/stableHorde"
+import { getWorker, workerKeys } from "../../../../services/aiHorde"
 import { WorkerCard } from "./workerCard"
 
 interface Props {

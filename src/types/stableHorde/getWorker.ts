@@ -1,4 +1,5 @@
 export interface GetWorkerResponse {
+    type: "image" | "text" | "interrogation"
     name: string
     id: string
     online: boolean
@@ -31,6 +32,8 @@ export interface GetWorkerResponse {
     megapixelsteps_generated: number
     img2img: boolean
     painting: boolean
-    type: "image" | "text" | "interrogation"
     "post-processing": boolean
+    max_length: number
+    max_context_length: number
+    tokens_generated: number
 }
