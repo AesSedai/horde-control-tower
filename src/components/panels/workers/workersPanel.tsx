@@ -139,7 +139,7 @@ export const WorkersPanel = (): JSX.Element => {
                             onChange={changeSortKey}
                             sx={{ ".MuiSelect-select": { py: 1 } }}>
                             {sortKeyList[workerType].map((elem) => (
-                                <MenuItem value={elem.parameter}>{elem.label}</MenuItem>
+                                <MenuItem key={elem.label} value={elem.parameter}>{elem.label}</MenuItem>
                             ))}
                         </Select>
                     </FormControl>

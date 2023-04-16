@@ -27,7 +27,7 @@ export const axiosLocal = axios.create({
 })
 
 export const axiosRatingsBase = axios.create({
-    baseURL: "https://ratings.aihorde.net/api/"
+    baseURL: "https://ratings.aihorde.net/api/v1/"
 })
 
 axiosRatingsBase.interceptors.request.use(

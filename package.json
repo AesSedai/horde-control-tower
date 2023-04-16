@@ -1,6 +1,6 @@
 {
   "name": "horde-control-tower",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "private": true,
   "type": "module",
   "scripts": {
@@ -53,6 +53,7 @@
     "react-redux": "^8.0.4",
     "react-router-dom": "^6.4.1",
     "redux-persist": "^6.0.0",
+    "ts-toolbelt": "^9.6.0",
     "tsx-control-statements": "^4.1.1",
     "use-async-effect": "^2.2.7"
   },

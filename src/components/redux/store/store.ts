@@ -15,7 +15,7 @@ import { persistTransform } from "../transforms/persistTransform"
 const persistConfig = {
     key: "root",
     storage,
-    whitelist: [persistStateSlice.name],
+    whitelist: [persistStateSlice.name, userPanelStateSlice.name],
     transforms: [persistTransform]
 }
 

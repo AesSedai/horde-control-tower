@@ -2,6 +2,7 @@ import { TabContext, TabList, TabPanel } from "@mui/lab"
 import { Box, Tab } from "@mui/material"
 import { AboutPanel } from "./panels/about/about"
 import { ComparatorPanel } from "./panels/comparator/comparatorPanel"
+import { RatingsPanel } from "./panels/ratings/ratings"
 import { SettingsPanel } from "./panels/settings/settingsPanel"
 import { UserPanel } from "./panels/user/userPanel"
 import { UtilitiesPanel } from "./panels/utilities/utilitiesPanel"
@@ -32,9 +33,10 @@ export const Layout = (): JSX.Element => {
                             <Tab label="User Lookup" value="1" />
                             <Tab label="Workers" value="2" />
                             <Tab label="Comparator" value="3" />
-                            <Tab label="Utilities" value="4" />
-                            <Tab label="Settings" value="5" />
-                            <Tab label="About" value="6" />
+                            <Tab label="Ratings" value="4" />
+                            <Tab label="Utilities" value="5" />
+                            <Tab label="Settings" value="6" />
+                            <Tab label="About" value="7" />
                         </TabList>
                     </Box>
                     <TabPanel value={"1"}>
@@ -47,12 +49,15 @@ export const Layout = (): JSX.Element => {
                         <ComparatorPanel />
                     </TabPanel>
                     <TabPanel value={"4"}>
-                        <UtilitiesPanel />
+                        <RatingsPanel />
                     </TabPanel>
                     <TabPanel value={"5"}>
-                        <SettingsPanel />
+                        <UtilitiesPanel />
                     </TabPanel>
                     <TabPanel value={"6"}>
+                        <SettingsPanel />
+                    </TabPanel>
+                    <TabPanel value={"7"}>
                         <AboutPanel />
                     </TabPanel>
                 </TabContext>

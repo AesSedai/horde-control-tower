@@ -1,4 +1,3 @@
-import StarBorderIcon from "@mui/icons-material/StarBorder"
 import { Alert, Box, Button, Paper, Snackbar } from "@mui/material"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { isEmpty } from "lodash-es"
@@ -92,8 +91,6 @@ export const UserLookup = (): JSX.Element => {
                                     Save
                                 </Button>
                             ) : null}
-
-                            <StarBorderIcon />
                         </Box>
                     ) : null}
                 </Box>

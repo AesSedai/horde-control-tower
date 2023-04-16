@@ -15,7 +15,7 @@ export interface GetUserResponse {
         awarded: number
     }
     worker_count: number
-    worker_ids: string[]
+    worker_ids?: string[]
     monthly_kudos: {
         amount: number
         last_received: string
