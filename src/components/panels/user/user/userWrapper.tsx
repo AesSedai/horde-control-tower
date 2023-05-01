@@ -21,11 +21,12 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { useUserFormContext } from "../../../../context/userFormContext"
 import { getUser, putUser, userKeys } from "../../../../services/aiHorde"
-import { postUserFlagRatings } from "../../../../services/ratings"
+import { getUserCheck, postUserFlagRatings, postUserModify, ratingKeys } from "../../../../services/ratings"
+import { PostUserModifyPayload, PostUserModifyResponse } from "../../../../types/ratings/postUserModify"
 import { PutUserRequest } from "../../../../types/stableHorde/api"
 import { useAppSelector } from "../../../redux/store/hooks"
 
-type DialogTypes = "resetSuspicion" | "setFlagged"
+type DialogTypes = "resetSuspicion" | "setFlagged" | "setValidated" | "setUnvalidated"
 
 export const UserWrapper = (): JSX.Element => {
     const userId = useAppSelector((state) => state.userPanel.selectedUser ?? -1)
@@ -34,9 +35,11 @@ export const UserWrapper = (): JSX.Element => {
     const [snackbarOpen, setSnackbarOpen] = useState(false)
     const [dialogOpen, setDialogOpen] = useState(false)
 
-    const { data, isInitialLoading, isLoading } = useQuery(userKeys.detail(userId), () => getUser(userId), {
+    const userDetail = useQuery(userKeys.detail(userId), () => getUser(userId), {
         refetchInterval: 1000 * 15
     })
+
+    const ratingCheck = useQuery(ratingKeys.check(userId), () => getUserCheck(userId))
 
     const updateUserMutation = useMutation<PutUserRequest, unknown, { id: number; data: PutUserRequest }, unknown>(
         (data) => {
@@ -49,33 +52,41 @@ export const UserWrapper = (): JSX.Element => {
         }
     )
 
-    const flagUserMutation = useMutation<{}, unknown, { id: number }, unknown>(
+    const flagUserMutation = useMutation<{}, unknown, { id: number }, unknown>((data) => {
+        return postUserFlagRatings(data.id)
+    }, {})
+
+    const modifyUserMutation = useMutation<
+        PostUserModifyResponse,
+        unknown,
+        { id: number; data: PostUserModifyPayload },
+        unknown
+    >(
         (data) => {
-            return postUserFlagRatings(data.id)
+            return postUserModify(data.id, data.data)
         },
-        {}
-        // {
-        //     onSuccess: (data, vars) => {
-        //         queryClient.invalidateQueries({ queryKey: userKeys.detail(vars.id) })
-        //     }
-        // }
+        {
+            onSuccess: (data, vars) => {
+                queryClient.invalidateQueries({ queryKey: ratingKeys.check(vars.id) })
+            }
+        }
     )
 
     const form = useUserFormContext()
 
     useEffect(() => {
-        if (data != null) {
+        if (userDetail.data != null) {
             const toSet = {
-                trusted: data.trusted,
-                flagged: data.flagged,
-                worker_invite: data.worker_invited.toString()
+                trusted: userDetail.data.trusted,
+                flagged: userDetail.data.flagged,
+                worker_invite: userDetail.data.worker_invited.toString()
             }
             form.setValues(toSet)
             form.resetDirty(toSet)
         }
-    }, [isInitialLoading])
+    }, [userDetail.isInitialLoading])
 
-    if (isLoading) {
+    if (userDetail.isLoading || ratingCheck.isLoading) {
         return (
             <Box py={4} sx={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
                 <CircularProgress />
@@ -83,9 +94,11 @@ export const UserWrapper = (): JSX.Element => {
         )
     }
 
-    if (data == null) {
+    if (userDetail.data == null || ratingCheck.data == null) {
         return <></>
     }
+
+    let isValidated = ratingCheck.data.validated
 
     const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === "clickaway") {
@@ -100,7 +113,7 @@ export const UserWrapper = (): JSX.Element => {
             case "resetSuspicion":
                 return (
                     <>
-                        <DialogTitle>Reset "{data.username}" Suspicion</DialogTitle>
+                        <DialogTitle>Reset "{userDetail.data.username}" Suspicion</DialogTitle>
                         <DialogActions>
                             <Button
                                 onClick={() => {
@@ -124,7 +137,7 @@ export const UserWrapper = (): JSX.Element => {
             case "setFlagged":
                 return (
                     <>
-                        <DialogTitle>Flag "{data.username}" ratings and delete?</DialogTitle>
+                        <DialogTitle>Flag "{userDetail.data.username}" ratings and delete?</DialogTitle>
                         <DialogActions>
                             <Button
                                 onClick={() => {
@@ -135,6 +148,54 @@ export const UserWrapper = (): JSX.Element => {
                             <Button
                                 onClick={() => {
                                     flagUserMutation.mutate({ id: userId })
+                                    setDialogOpen(false)
+                                }}>
+                                Confirm
+                            </Button>
+                        </DialogActions>
+                    </>
+                )
+            case "setValidated":
+                return (
+                    <>
+                        <DialogTitle>Set "{userDetail.data.username}" ratings as validated</DialogTitle>
+                        <DialogActions>
+                            <Button
+                                onClick={() => {
+                                    setDialogOpen(false)
+                                }}>
+                                Cancel
+                            </Button>
+                            <Button
+                                onClick={async () => {
+                                    const data: PostUserModifyPayload = {
+                                        validated: true
+                                    }
+                                    await modifyUserMutation.mutate({ id: userId, data: data })
+                                    setDialogOpen(false)
+                                }}>
+                                Confirm
+                            </Button>
+                        </DialogActions>
+                    </>
+                )
+            case "setUnvalidated":
+                return (
+                    <>
+                        <DialogTitle>Set "{userDetail.data.username}" ratings as unvalidated</DialogTitle>
+                        <DialogActions>
+                            <Button
+                                onClick={() => {
+                                    setDialogOpen(false)
+                                }}>
+                                Cancel
+                            </Button>
+                            <Button
+                                onClick={async () => {
+                                    const data: PostUserModifyPayload = {
+                                        validated: false
+                                    }
+                                    await modifyUserMutation.mutate({ id: userId, data: data })
                                     setDialogOpen(false)
                                 }}>
                                 Confirm
@@ -173,7 +234,7 @@ export const UserWrapper = (): JSX.Element => {
                             </TableCell>
                             <TableCell align="right">
                                 <Typography variant="body1">
-                                    {data.username} {data.moderator ? "(moderator)" : ""}
+                                    {userDetail.data.username} {userDetail.data.moderator ? "(moderator)" : ""}
                                 </Typography>
                             </TableCell>
                         </TableRow>
@@ -222,7 +283,7 @@ export const UserWrapper = (): JSX.Element => {
                                 <Typography variant="body1">Worker Count</Typography>
                             </TableCell>
                             <TableCell align="right">
-                                <Typography variant="body1">{data.worker_count}</Typography>
+                                <Typography variant="body1">{userDetail.data.worker_count}</Typography>
                             </TableCell>
                         </TableRow>
                         <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
@@ -230,7 +291,7 @@ export const UserWrapper = (): JSX.Element => {
                                 <Typography variant="body1">Kudos</Typography>
                             </TableCell>
                             <TableCell align="right">
-                                <Typography variant="body1">{data.kudos}</Typography>
+                                <Typography variant="body1">{userDetail.data.kudos}</Typography>
                             </TableCell>
                         </TableRow>
                         <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
@@ -246,9 +307,9 @@ export const UserWrapper = (): JSX.Element => {
                                     flexDirection: "row"
                                 }}>
                                 <Typography sx={{ order: 0 }} variant="body1">
-                                    {data.suspicious}
+                                    {userDetail.data.suspicious}
                                 </Typography>
-                                {data.suspicious > 0 ? (
+                                {userDetail.data.suspicious > 0 ? (
                                     <LoadingButton
                                         onClick={async () => {
                                             setDialogType("resetSuspicion")
@@ -261,6 +322,31 @@ export const UserWrapper = (): JSX.Element => {
                                         Reset
                                     </LoadingButton>
                                 ) : null}
+                            </TableCell>
+                        </TableRow>
+                        <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                            <TableCell component="th" scope="row">
+                                <Typography variant="body1">Ratings Validated</Typography>
+                            </TableCell>
+                            <TableCell align="right" sx={{ display: "flex", alignItems: "center" }}>
+                                <Typography sx={{ order: 1 }} variant="body1">
+                                    {ratingCheck.data.validated ? "True" : "False"}
+                                </Typography>
+                                <LoadingButton
+                                    onClick={async () => {
+                                        if (ratingCheck.data.validated) {
+                                            setDialogType("setUnvalidated")
+                                        } else {
+                                            setDialogType("setValidated")
+                                        }
+                                        setDialogOpen(true)
+                                    }}
+                                    loading={modifyUserMutation.isLoading}
+                                    variant="contained"
+                                    color={ratingCheck.data.validated ? "error" : "success"}
+                                    sx={{ order: 0, ml: 4 }}>
+                                    {ratingCheck.data.validated ? "Unvalidate" : "Validate"}
+                                </LoadingButton>
                             </TableCell>
                         </TableRow>
                         <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>

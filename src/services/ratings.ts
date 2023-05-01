@@ -1,4 +1,11 @@
-import { GetUserRatings, GetUserValidate, PostUserFlagResponse } from "../types/ratings/api"
+import {
+    GetUserCheck,
+    GetUserRatings,
+    GetUserValidate,
+    PostUserFlagResponse,
+    PostUserModifyPayload,
+    PostUserModifyResponse
+} from "../types/ratings/api"
 import { axiosRatingsBase } from "../utils/axios"
 
 export type GetUserRatingsQueryParams = {
@@ -25,8 +32,14 @@ export const getUserValidate = (id: number, params?: GetUserRatingsQueryParams):
         .get(`user/validate/${id}`, { params: Object.assign({}, ratingsQueryDefaultParams, params) })
         .then((response) => response.data)
 
+export const getUserCheck = (id: number): Promise<GetUserCheck> =>
+    axiosRatingsBase.get(`user/check/${id}`).then((response) => response.data)
+
 export const postUserFlagRatings = (id: number): Promise<PostUserFlagResponse> =>
     axiosRatingsBase.post(`user/flag/${id}`).then((response) => response.data)
+
+export const postUserModify = (id: number, payload: PostUserModifyPayload): Promise<PostUserModifyResponse> =>
+    axiosRatingsBase.post(`user/modify/${id}`, payload).then((response) => response.data)
 
 export const ratingKeys = {
     all: ["ratings"] as const,
@@ -35,5 +48,7 @@ export const ratingKeys = {
     details: () => [...ratingKeys.all, "detail"] as const,
     detail: (id: number) => [...ratingKeys.details(), id] as const,
     validates: () => [...ratingKeys.all, "validate"] as const,
-    validate: (id: number) => [...ratingKeys.validates(), id] as const
+    validate: (id: number) => [...ratingKeys.validates(), id] as const,
+    checks: () => [...ratingKeys.all, "check"] as const,
+    check: (id: number) => [...ratingKeys.checks(), id] as const
 }

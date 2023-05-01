@@ -1,5 +1,8 @@
 # Changelog
 
+### Version 0.0.6 - 04/30/2023
+- Added ability to set user ratings as Validated / Unvalidated and included validation status in User infobox
+
 ### Version 0.0.5 - 04/19/2023
 - Added ability to look up users with well-formed names instead of just numeric id
   - Example format: <string>#<number>, eg: `Aes Sedai#200`
