@@ -28,7 +28,7 @@ export const Navbar = (): JSX.Element => {
                     <MenuIcon />
                 </IconButton>
                 <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-                    Horde Control Tower
+                    Horde Control Tower v{APP_VERSION}
                 </Typography>
                 {import.meta.env.DEV ? <Button onClick={onResetClick}>Reset</Button> : null}
             </Toolbar>
