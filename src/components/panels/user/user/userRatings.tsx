@@ -13,10 +13,17 @@ export const UserRatings = (props: Props): JSX.Element => {
     const queryClient = useQueryClient()
     const { userId } = props
     const [open, setOpen] = useState(false)
+    const [hasError, setHasError] = useState(false)
 
-    const { data, isInitialLoading, isLoading } = useQuery(ratingKeys.validate(userId), () => getUserValidate(userId), {
-        refetchInterval: 1000 * 15
-    })
+    const { data, isInitialLoading, isLoading, isError } = useQuery(
+        ratingKeys.validate(userId),
+        () => getUserValidate(userId),
+        {
+            enabled: !hasError,
+            onError: (error) => setHasError(true),
+            refetchInterval: 1000 * 15
+        }
+    )
 
     const renderTitle = (rating: List.UnionOf<GetUserRatings["ratings"]>): JSX.Element => {
         return (
@@ -36,6 +43,10 @@ export const UserRatings = (props: Props): JSX.Element => {
                 </Box>
             </Box>
         )
+    }
+
+    if (isError) {
+        return <Typography>User has no ratings.</Typography>
     }
 
     if (data == null) {

@@ -8,6 +8,7 @@ import {
 } from "@mui/material/styles"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
+import axios from "axios"
 import { createRoot } from "react-dom/client"
 import { Provider } from "react-redux"
 import { PersistGate } from "redux-persist/integration/react"
@@ -30,7 +31,19 @@ const darkTheme = createTheme({
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
-            refetchOnWindowFocus: false
+            refetchOnWindowFocus: false,
+            retry: (failureCount, error): boolean => {
+                if (axios.isAxiosError(error)) {
+                    if (error.response?.status != null && error.response.status >= 400 && error.response.status < 500) {
+                        // don't retry on 4xx errors
+                        return false
+                    }
+                } else {
+                    return failureCount < 3
+                    // Just a stock error
+                }
+                return failureCount < 3
+            }
         }
     }
 })

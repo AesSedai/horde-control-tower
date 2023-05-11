@@ -1,5 +1,11 @@
 # Changelog
 
+### Version 0.0.6 - 05/11/2023
+- Stop silently refetching 3 times on network 400 errors
+- Handle case where user ratings don't exist that was causing the UserPanel to never resolve data
+- Hide the ratings-related info on the UserPanel if user had no ratings
+- Fix small double-render issue with the UserPanel lookup when user ID is less than 4769 (i.e., user already in the cached user list)
+
 ### Version 0.0.6 - 04/30/2023
 - Added ability to set user ratings as Validated / Unvalidated and included validation status in User infobox
 

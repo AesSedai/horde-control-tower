@@ -34,12 +34,17 @@ export const UserWrapper = (): JSX.Element => {
     const [dialogType, setDialogType] = useState<DialogTypes>("setFlagged")
     const [snackbarOpen, setSnackbarOpen] = useState(false)
     const [dialogOpen, setDialogOpen] = useState(false)
+    const [ratingHasError, setRatingHasError] = useState(false)
 
     const userDetail = useQuery(userKeys.detail(userId), () => getUser(userId), {
         refetchInterval: 1000 * 15
     })
 
-    const ratingCheck = useQuery(ratingKeys.check(userId), () => getUserCheck(userId))
+    const ratingCheck = useQuery(ratingKeys.check(userId), () => getUserCheck(userId), {
+        enabled: !ratingHasError,
+        onError: (error) => setRatingHasError(true),
+        refetchInterval: 1000 * 15
+    })
 
     const updateUserMutation = useMutation<PutUserRequest, unknown, { id: number; data: PutUserRequest }, unknown>(
         (data) => {
@@ -86,7 +91,7 @@ export const UserWrapper = (): JSX.Element => {
         }
     }, [userDetail.isInitialLoading])
 
-    if (userDetail.isLoading || ratingCheck.isLoading) {
+    if (userDetail.isLoading) {
         return (
             <Box py={4} sx={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
                 <CircularProgress />
@@ -94,11 +99,11 @@ export const UserWrapper = (): JSX.Element => {
         )
     }
 
-    if (userDetail.data == null || ratingCheck.data == null) {
+    if (userDetail.data == null) {
         return <></>
     }
 
-    let isValidated = ratingCheck.data.validated
+    const ratingData = ratingCheck.data ?? null
 
     const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === "clickaway") {
@@ -324,56 +329,60 @@ export const UserWrapper = (): JSX.Element => {
                                 ) : null}
                             </TableCell>
                         </TableRow>
-                        <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                            <TableCell component="th" scope="row">
-                                <Typography variant="body1">Ratings Validated</Typography>
-                            </TableCell>
-                            <TableCell align="right" sx={{ display: "flex", alignItems: "center" }}>
-                                <Typography sx={{ order: 1 }} variant="body1">
-                                    {ratingCheck.data.validated ? "True" : "False"}
-                                </Typography>
-                                <LoadingButton
-                                    onClick={async () => {
-                                        if (ratingCheck.data.validated) {
-                                            setDialogType("setUnvalidated")
-                                        } else {
-                                            setDialogType("setValidated")
-                                        }
-                                        setDialogOpen(true)
-                                    }}
-                                    loading={modifyUserMutation.isLoading}
-                                    variant="contained"
-                                    color={ratingCheck.data.validated ? "error" : "success"}
-                                    sx={{ order: 0, ml: 4 }}>
-                                    {ratingCheck.data.validated ? "Unvalidate" : "Validate"}
-                                </LoadingButton>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                            <TableCell component="th" scope="row">
-                                <Typography variant="body1">Flag User Ratings</Typography>
-                            </TableCell>
-                            <TableCell
-                                sx={{
-                                    display: "flex",
-                                    flex: "1 1 0",
-                                    alignItems: "center",
-                                    justifyContent: "flex-end",
-                                    flexDirection: "row"
-                                }}>
-                                <LoadingButton
-                                    onClick={async () => {
-                                        setDialogType("setFlagged")
-                                        setDialogOpen(true)
-                                    }}
-                                    loading={flagUserMutation.isLoading}
-                                    variant="contained"
-                                    color="error"
-                                    sx={{ order: 0 }}>
-                                    Flag
-                                </LoadingButton>
-                            </TableCell>
-                        </TableRow>
+                        {ratingData != null ? (
+                            <>
+                                <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                                    <TableCell component="th" scope="row">
+                                        <Typography variant="body1">Ratings Validated</Typography>
+                                    </TableCell>
+                                    <TableCell align="right" sx={{ display: "flex", alignItems: "center" }}>
+                                        <Typography sx={{ order: 1 }} variant="body1">
+                                            {ratingData.validated ? "True" : "False"}
+                                        </Typography>
+                                        <LoadingButton
+                                            onClick={async () => {
+                                                if (ratingData.validated) {
+                                                    setDialogType("setUnvalidated")
+                                                } else {
+                                                    setDialogType("setValidated")
+                                                }
+                                                setDialogOpen(true)
+                                            }}
+                                            loading={modifyUserMutation.isLoading}
+                                            variant="contained"
+                                            color={ratingData.validated ? "error" : "success"}
+                                            sx={{ order: 0, ml: 4 }}>
+                                            {ratingData.validated ? "Unvalidate" : "Validate"}
+                                        </LoadingButton>
+                                    </TableCell>
+                                </TableRow>
+                                <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                                    <TableCell component="th" scope="row">
+                                        <Typography variant="body1">Flag User Ratings</Typography>
+                                    </TableCell>
+                                    <TableCell
+                                        sx={{
+                                            display: "flex",
+                                            flex: "1 1 0",
+                                            alignItems: "center",
+                                            justifyContent: "flex-end",
+                                            flexDirection: "row"
+                                        }}>
+                                        <LoadingButton
+                                            onClick={async () => {
+                                                setDialogType("setFlagged")
+                                                setDialogOpen(true)
+                                            }}
+                                            loading={flagUserMutation.isLoading}
+                                            variant="contained"
+                                            color="error"
+                                            sx={{ order: 0 }}>
+                                            Flag
+                                        </LoadingButton>
+                                    </TableCell>
+                                </TableRow>
+                            </>
+                        ) : null}
                     </TableBody>
                 </Table>
             </TableContainer>

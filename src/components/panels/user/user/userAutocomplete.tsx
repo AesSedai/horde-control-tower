@@ -55,7 +55,7 @@ export const UserAutocomplete = (): JSX.Element => {
     return (
         <Autocomplete
             disablePortal
-            options={[...(userData != null ? [userData] : []), ...(data ?? [])]}
+            options={[...(userData != null && userData.id > 4769 ? [userData] : []), ...(data ?? [])]}
             sx={{ width: 300 }}
             blurOnSelect
             autoHighlight
