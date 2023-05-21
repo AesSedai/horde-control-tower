@@ -26,7 +26,7 @@ import { PostUserModifyPayload, PostUserModifyResponse } from "../../../../types
 import { PutUserRequest } from "../../../../types/stableHorde/api"
 import { useAppSelector } from "../../../redux/store/hooks"
 
-type DialogTypes = "resetSuspicion" | "setFlagged" | "setValidated" | "setUnvalidated"
+type DialogTypes = "resetSuspicion" | "setFlagged" | "setValidated" | "setUnvalidated" | "setVPN" | "unsetVPN"
 
 export const UserWrapper = (): JSX.Element => {
     const userId = useAppSelector((state) => state.userPanel.selectedUser ?? -1)
@@ -208,6 +208,56 @@ export const UserWrapper = (): JSX.Element => {
                         </DialogActions>
                     </>
                 )
+            case "setVPN":
+                return (
+                    <>
+                        <DialogTitle>Allow "{userDetail.data.username}" to use VPNs</DialogTitle>
+                        <DialogActions>
+                            <Button
+                                onClick={() => {
+                                    setDialogOpen(false)
+                                }}>
+                                Cancel
+                            </Button>
+                            <Button
+                                onClick={async () => {
+                                    const data: PutUserRequest = {
+                                        vpn: true
+                                    }
+                                    updateUserMutation.mutate({ id: userId, data: data })
+                                    setSnackbarOpen(true)
+                                    setDialogOpen(false)
+                                }}>
+                                Confirm
+                            </Button>
+                        </DialogActions>
+                    </>
+                )
+            case "unsetVPN":
+                return (
+                    <>
+                        <DialogTitle>Disallow "{userDetail.data.username}" to use VPNs</DialogTitle>
+                        <DialogActions>
+                            <Button
+                                onClick={() => {
+                                    setDialogOpen(false)
+                                }}>
+                                Cancel
+                            </Button>
+                            <Button
+                                onClick={async () => {
+                                    const data: PutUserRequest = {
+                                        vpn: false
+                                    }
+                                    updateUserMutation.mutate({ id: userId, data: data })
+                                    setSnackbarOpen(true)
+                                    setDialogOpen(false)
+                                }}>
+                                Confirm
+                            </Button>
+                        </DialogActions>
+                    </>
+                )
         }
     }
 
@@ -257,6 +307,35 @@ export const UserWrapper = (): JSX.Element => {
                             </TableCell>
                             <TableCell align="right">
                                 <Switch {...form.getInputProps("flagged", { type: "checkbox" })} size="small" />
+                            </TableCell>
+                        </TableRow>
+                        <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                            <TableCell component="th" scope="row">
+                                <Typography variant="body1">VPN Access</Typography>
+                            </TableCell>
+                            <TableCell align="right" sx={{ display: "flex", alignItems: "center" }}>
+                                <LoadingButton
+                                    onClick={async () => {
+                                        setDialogType("setVPN")
+                                        setDialogOpen(true)
+                                    }}
+                                    loading={modifyUserMutation.isLoading}
+                                    variant="contained"
+                                    color="success"
+                                    sx={{ order: 1, ml: 4 }}>
+                                    Enable VPN
+                                </LoadingButton>
+                                <LoadingButton
+                                    onClick={async () => {
+                                        setDialogType("unsetVPN")
+                                        setDialogOpen(true)
+                                    }}
+                                    loading={modifyUserMutation.isLoading}
+                                    variant="contained"
+                                    color="error"
+                                    sx={{ order: 0, ml: 4 }}>
+                                    Disable VPN
+                                </LoadingButton>
                             </TableCell>
                         </TableRow>
                         <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>

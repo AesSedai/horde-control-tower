@@ -11,4 +11,6 @@ export type PutUserRequest = Partial<{
     flagged: boolean
     reset_suspicion: boolean
     contact: string
+    customizer: boolean
+    vpn: boolean
 }>

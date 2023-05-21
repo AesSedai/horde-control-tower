@@ -1,6 +1,9 @@
 # Changelog
 
-### Version 0.0.6 - 05/11/2023
+### Version 0.0.8 - 05/21/2023
+- Add a VPN enable / disable button to UserPanel
+
+### Version 0.0.7 - 05/11/2023
 - Stop silently refetching 3 times on network 400 errors
 - Handle case where user ratings don't exist that was causing the UserPanel to never resolve data
 - Hide the ratings-related info on the UserPanel if user had no ratings
